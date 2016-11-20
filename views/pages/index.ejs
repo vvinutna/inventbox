@@ -328,6 +328,11 @@
     <!-- Main content -->
     <section class="content">
 
+        <ul>
+            <% results.forEach(function(r) { %>
+                <li><%= r.id %> - <%= r.name %></li>
+            <% }); %>
+        </ul>
 
     </section>
     <!-- /.content -->
