@@ -13,8 +13,20 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/add', function(request, response) {
+app.get('/addItems', function(request, response) {
   response.render('pages/addItems');
+});
+
+app.get('/addCategories', function(request, response) {
+  response.render('pages/addCategories');
+});
+
+app.get('/removeItems', function(request, response) {
+  response.render('pages/removeItems');
+});
+
+app.get('/removeCategories', function(request, response) {
+  response.render('pages/removeCategories');
 });
 
 app.listen(app.get('port'), function() {
