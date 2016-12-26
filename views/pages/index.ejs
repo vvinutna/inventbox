@@ -332,31 +332,22 @@
           <h2>Database Results</h2>
         </div>
         <div>
-          <ul>
-            <% results.forEach(function(r) { %>
-              <%= r.quantity %> - <%= r.name %><br>
-            <% }); %>
-          </ul>
-          </div>
-          <div>
           <table style="width:100%">
-  <tr>
-    <th>Firstname</th>
-    <th>Lastname</th> 
-    <th>Age</th>
-  </tr>
-  <tr>
-    <td>Jill</td>
-    <td>Smith</td> 
-    <td>50</td>
-  </tr>
-  <tr>
-    <td>Eve</td>
-    <td>Jackson</td> 
-    <td>94</td>
-  </tr>
-</table>
-        </div>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th> 
+               <th>Category</th>
+             </tr>
+            <% results.forEach(function(r) { %>
+              
+                <tr>
+                  <th><%= r.name %></th>
+                  <th><%= r.quantity %></th> 
+                  <th><%= r.category %></th>
+                </tr>
+              <% }); %>
+          </table>
+          </div>
 
     </section>
     <!-- /.content -->
