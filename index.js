@@ -46,7 +46,7 @@ app.get('/removeItems', function(request, response) {
 });
 
 app.get('/removeCategories', function(request, response) {
-  response.render('pages/index', {results: result.rows} );
+  response.render('pages/removeCategories');
 });
 
 app.listen(app.get('port'), function() {
