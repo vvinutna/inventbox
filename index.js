@@ -34,7 +34,7 @@ app.get('/removeItems', function(request, response) {
 });
 
 app.get('/removeCategories', function(request, response) {
-  response.render('pages/removeCategories');
+  response.render('pages/index', {results: result.rows} );
 });
 
 app.get('/inventory', function(request, response) {
