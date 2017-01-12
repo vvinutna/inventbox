@@ -12,7 +12,10 @@
   "dependencies": {
     "pg": "4.x",
     "ejs": "2.4.1",
-    "express": "4.13.3"
+    "express": "4.13.3",
+    "passport": "~0.1.17",
+    "passport-local": "~0.1.6",
+    "bcrpyt-nodejs": "latest"
   },
   "repository": {
     "type": "git",
