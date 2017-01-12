@@ -27,7 +27,7 @@ app.get('/', function(request, response) {
 //          { response.render('pages/index', {results: result.rows} ); }
 //       });
 //     });
-  response.render('pages/index');
+  response.render('pages/addItems');
 });
 
 app.get('/login', function(request, response) {
