@@ -21,6 +21,15 @@ app.get('/', function(request, response) {
   });
 });
 
+app.get('/login', function(request, response) {
+  response.render('pages/login');
+});
+
+app.get('/signup', function(request, response) {
+  response.render('pages/signup');
+});
+     
+        
 app.get('/inventory', function(request, response) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('SELECT * FROM test_table', function(err, result) {
