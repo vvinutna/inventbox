@@ -3,6 +3,14 @@ var app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
+var passport = require('passport');
+
+//required for passport
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash());
+
 app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
