@@ -36,6 +36,11 @@ app.get('/login', function(request, response) {
 app.get('/signup', function(request, response) {
   response.render('pages/signup');
 });
+
+app.get('/logout', function(request, response) {
+  response.logout();
+  response.redirect('/');
+});
      
         
 app.get('/inventory', function(request, response) {
