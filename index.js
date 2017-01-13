@@ -24,10 +24,9 @@ app.get('/', function(request, response) {
         if (err)
          { console.error(err); response.send("Error " + err); }
         else
-         { response.render('pages/index', {results: result.rows} ); }
+         { response.render('pages/dashboard', {results: result.rows} ); }
       });
     });
-  response.render('pages/dashboard');
 });
 
 app.get('/login', function(request, response) {
