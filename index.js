@@ -29,9 +29,9 @@ app.set('view engine', 'ejs');
 //     });
 // });
 
-app.get('/', function(request, response) {
-    response.render('pages/index');
-});
+// app.get('/', function(request, response) {
+//     response.render('pages/index');
+// });
 
 app.get('/login', function(request, response) {
   response.render('pages/login');
@@ -63,9 +63,9 @@ app.get('/inventory', function(request, response) {
   });
 });
 
-app.get('/addItems', function(request, response) {
-  response.render('pages/addItems');
-});
+// app.get('/addItems', function(request, response) {
+//   response.render('pages/addItems');
+// });
 
 app.get('/addCategories', function(request, response) {
   response.render('pages/addCategories');
