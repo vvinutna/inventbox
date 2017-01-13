@@ -5,9 +5,9 @@
   "engines": {
     "node": "5.9.1"
   },
-  "main": "index.js",
+  "main": "pages/index.ejs",
   "scripts": {
-    "start": "node index.js"
+    "start": "node pages/index.ejs"
   },
   "dependencies": {
     "pg": "4.x",
