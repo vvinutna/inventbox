@@ -34,7 +34,7 @@ app.get('/login', function(request, response) {
 });
 
 app.get('/test', function(request, response) {
-  response.render('pages/login');
+  response.render('pages/index');
 });
 
 app.get('/signup', function(request, response) {
