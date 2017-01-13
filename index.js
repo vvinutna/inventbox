@@ -18,16 +18,15 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
-//     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-//       client.query('SELECT * FROM test_table', function(err, result) {
-//         done();
-//         if (err)
-//          { console.error(err); response.send("Error " + err); }
-//         else
-//          { response.render('pages/dashboard', {results: result.rows} ); }
-//       });
-//     });
-    response.render('pages/index.ejs');
+    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+      client.query('SELECT * FROM test_table', function(err, result) {
+        done();
+        if (err)
+         { console.error(err); response.send("Error " + err); }
+        else
+         { response.render('pages/dashboard', {results: result.rows} ); }
+      });
+    });
 });
 
 app.get('/login', function(request, response) {
@@ -35,7 +34,7 @@ app.get('/login', function(request, response) {
 });
 
 app.get('/test', function(request, response) {
-  response.render('pages/test');
+  response.render('pages/login');
 });
 
 app.get('/signup', function(request, response) {
