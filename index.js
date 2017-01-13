@@ -34,6 +34,10 @@ app.get('/login', function(request, response) {
   response.render('pages/login');
 });
 
+app.get('/test', function(request, response) {
+  response.render('pages/test');
+});
+
 app.get('/signup', function(request, response) {
   response.render('pages/signup');
 });
