@@ -1,9 +1,23 @@
 var express = require('express');
 var app = express();
 
+//for passport
+var passport = require('passport');
+var flash    = require('connect-flash');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+app.use(cookieParser());
+
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
+
+//for passport
+// require('./config/passport')(passport);
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); 
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
@@ -16,7 +30,9 @@ app.get('/', function(request, response) {
       if (err)
        { console.error(err); response.send("Error " + err); }
       else
-       { response.render('pages/index', {results: result.rows} ); }
+       //{ response.render('pages/index', {results: result.rows} ); }
+        //THIS IS WHERE YOU LEFT OFF, MAKING IT GO TO LOGIN FIRST       
+       { response.render('login'); }
     });
   });
 });
@@ -42,6 +58,9 @@ app.listen(app.get('port'), function() {
 });
 
 var pg = require('pg');
+
+//for passport
+require('./app/routes.js')(app, passport);
 
 app.get('/db', function (request, response) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
