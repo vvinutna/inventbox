@@ -44,7 +44,7 @@ app.set('view engine', 'ejs');
 // });
 
 app.get('/', function(request, response) {
-    response.render('pages/login');
+    response.render('pages/index');
 });
 
 app.get('/login', function(request, response) {
