@@ -5,7 +5,7 @@
   "engines": {
     "node": "5.9.1"
   },
-  "main": "pages/index.ejs",
+  "main": "pages/login.ejs",
   "scripts": {
     "start": "node pages/index.ejs"
   },
