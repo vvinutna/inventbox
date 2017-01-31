@@ -59,17 +59,18 @@ app.get('/logout', function(request, response) {
 });*/
         
 app.get('/inventory', function(request, response) {
-  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    client.query('SELECT * FROM test_table', function(err, result) {
-      done();
-      if (err)
-       { console.error(err); response.send("Error " + err); }
-      else
-       { response.render('pages/index', {results: result.rows} ); }
-        //THIS IS WHERE YOU LEFT OFF, MAKING IT GO TO LOGIN FIRST       
-       //{ response.render('home'); }
-    });
-  });
+  response.render('home');
+  // pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+  //   client.query('SELECT * FROM test_table', function(err, result) {
+  //     done();
+  //     if (err)
+  //      { console.error(err); response.send("Error " + err); }
+  //     else
+  //      { response.render('pages/index', {results: result.rows} ); }
+  //       //THIS IS WHERE YOU LEFT OFF, MAKING IT GO TO LOGIN FIRST       
+  //      //{ response.render('home'); }
+  //   });
+  // });
 });
 
 app.get('/addItems', function(request, response) {
