@@ -12,12 +12,6 @@ app.set('port', (process.env.PORT || 5000));
 
 var passport = require('passport');
 
-//required for passport
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash());
-
 app.use(express.static(__dirname + '/public'));
 
 //for passport
@@ -43,8 +37,8 @@ app.set('view engine', 'ejs');
 //     });
 // });
 
-app.get('/', function(request, response) {
-    response.render('login');
+/*app.get('/', function(request, response) {
+  response.render('home');
 });
 
 app.get('/login', function(request, response) {
@@ -62,8 +56,7 @@ app.get('/signup', function(request, response) {
 app.get('/logout', function(request, response) {
   response.logout();
   response.redirect('/');
-});
-     
+});*/
         
 app.get('/inventory', function(request, response) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
@@ -72,9 +65,9 @@ app.get('/inventory', function(request, response) {
       if (err)
        { console.error(err); response.send("Error " + err); }
       else
-       //{ response.render('pages/index', {results: result.rows} ); }
+       { response.render('pages/index', {results: result.rows} ); }
         //THIS IS WHERE YOU LEFT OFF, MAKING IT GO TO LOGIN FIRST       
-       { response.render('login'); }
+       //{ response.render('home'); }
     });
   });
 });

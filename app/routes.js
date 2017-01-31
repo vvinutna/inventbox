@@ -16,11 +16,21 @@ module.exports = function(app, passport) {
 
     // process the signup form
     // app.post('/signup', do all our passport stuff here);
-     app.post('/signup', passport.authenticate('local-signup', {
+    /*app.post('/signup', passport.authenticate('local-signup', {
         successRedirect : '/index', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
-    }));
+    }));*/
+
+    app.post('/signup', function(req, res, next) {
+        console.log(req.url);
+        passport.authenticate('local-signup', function(err, user, info) {
+            console.log("authenticate");
+            console.log(err);
+            console.log(user);
+            console.log(info);
+        })(req, res, next);
+    });
 
     app.get('/profile', isLoggedIn, function(req, res) {
         res.render('profile.ejs', {
