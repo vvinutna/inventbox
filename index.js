@@ -74,7 +74,7 @@ app.get('/inventory', function(request, response) {
 });
 
 app.get('/addItems', function(request, response) {
-  response.render('pages/dashboardcopy');
+  response.render('pages/addItems');
 });
 
 app.get('/dashboardcopy', function(request, response) {
