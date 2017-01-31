@@ -16,7 +16,7 @@ module.exports = function(app, passport) {
 
     app.get('/dashboard', function(req, res) {
         // render the page and pass in any flash data if it exists
-        res.render('pages/dashboard.ejs'); 
+        res.render('pages/dashboarddemo.ejs'); 
     });
 
     // process the signup form
