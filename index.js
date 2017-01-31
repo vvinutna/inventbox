@@ -76,6 +76,10 @@ app.get('/addItems', function(request, response) {
   response.render('pages/addItems');
 });
 
+app.get('/dashboard', function(request, response) {
+  response.render('pages/dasboarddemo');
+});
+
 app.get('/addCategories', function(request, response) {
   response.render('pages/addCategories');
 });
