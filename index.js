@@ -25,7 +25,7 @@ app.use(flash());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-// app.get('/', function(request, response) {
+// app.get('/dashboard', function(request, response) {
 //     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 //       client.query('SELECT * FROM test_table', function(err, result) {
 //         done();
@@ -58,7 +58,7 @@ app.get('/logout', function(request, response) {
   response.redirect('/');
 });*/
         
-app.get('/inventory', function(request, response) {
+/*app.get('/inventory', function(request, response) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('SELECT * FROM test_table', function(err, result) {
       done();
@@ -70,7 +70,7 @@ app.get('/inventory', function(request, response) {
        //{ response.render('home'); }
     });
   });
-});
+});*/
 
 app.get('/addItems', function(request, response) {
   response.render('pages/addItems');
@@ -97,7 +97,7 @@ var pg = require('pg');
 //for passport
 require('./app/routes.js')(app, passport);
 
-app.get('/db', function (request, response) {
+/*app.get('/db', function (request, response) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('SELECT * FROM test_table', function(err, result) {
       done();
@@ -107,4 +107,4 @@ app.get('/db', function (request, response) {
        { response.render('pages/db', {results: result.rows} ); }
     });
   });
-});
+});*/

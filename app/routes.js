@@ -14,6 +14,11 @@ module.exports = function(app, passport) {
         res.render('signup.ejs', { message: req.flash('signupMessage') });
     });
 
+    app.get('/dashboard', function(req, res) {
+        // render the page and pass in any flash data if it exists
+        res.render('pages/dashboard.ejs'); 
+    });
+
     // process the signup form
     // app.post('/signup', do all our passport stuff here);
     /*app.post('/signup', passport.authenticate('local-signup', {
