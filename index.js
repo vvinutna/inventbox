@@ -59,7 +59,7 @@ app.get('/logout', function(request, response) {
 });*/
         
 app.get('/inventory', function(request, response) {
-  response.render('pages/dashboard');
+  response.render('pages/dashboardcopy');
   // pg.connect(process.env.DATABASE_URL, function(err, client, done) {
   //   client.query('SELECT * FROM test_table', function(err, result) {
   //     done();
