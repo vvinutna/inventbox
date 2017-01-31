@@ -77,6 +77,10 @@ app.get('/addItems', function(request, response) {
   response.render('pages/addItems');
 });
 
+app.get('/dashboardcopy', function(request, response) {
+  response.render('pages/dashboardcopy');
+});
+
 app.get('/addCategories', function(request, response) {
   response.render('pages/addCategories');
 });
