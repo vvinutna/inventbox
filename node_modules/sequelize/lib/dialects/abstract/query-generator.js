@@ -10,7 +10,7 @@ var Utils = require('../../utils')
   , BelongsTo = require('../../associations/belongs-to')
   , BelongsToMany = require('../../associations/belongs-to-many')
   , HasMany = require('../../associations/has-many')
-  , uuid = require('node-uuid')
+  , uuid = require('uuid')
   , semver = require('semver');
 
 /* istanbul ignore next */
@@ -1336,7 +1336,7 @@ var QueryGenerator = {
               , subQueryWhere;
 
             associationWhere[association.identifierField] = {
-              $raw: self.quoteTable(parentTable) + '.' + self.quoteIdentifier(association.source.primaryKeyField)
+              $raw: self.quoteTable(parentTable) + '.' + self.quoteIdentifier(association.sourceKeyField || association.source.primaryKeyField)
             };
 
             if (!options.where) options.where = {};
@@ -1707,10 +1707,10 @@ var QueryGenerator = {
       , asLeft
       , attrLeft = association instanceof BelongsTo ?
                    association.identifier :
-                   left.primaryKeyAttribute
+                   association.sourceKeyAttribute || left.primaryKeyAttribute
       , fieldLeft = association instanceof BelongsTo ?
                    association.identifierField :
-                   left.rawAttributes[left.primaryKeyAttribute].field
+                   left.rawAttributes[association.sourceKeyAttribute || left.primaryKeyAttribute].field
 
       /* Attributes for the right side */
       , right = include.model
@@ -1770,7 +1770,7 @@ var QueryGenerator = {
         }
       }
     }
-
+    
     return joinType + this.quoteTable(tableRight, asRight) + ' ON ' + joinOn;
   },
 

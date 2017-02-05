@@ -1,5 +1,9 @@
+var pg = require('pg');
 var express = require('express');
 var app = express();
+
+var bodyParser = require( 'body-parser' );
+app.use( bodyParser.urlencoded({ extended: true }) );
 
 //for passport
 var passport = require('passport');
@@ -9,8 +13,6 @@ var session = require('express-session');
 app.use(cookieParser());
 
 app.set('port', (process.env.PORT || 5000));
-
-var passport = require('passport');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -91,8 +93,6 @@ app.get('/removeCategories', function(request, response) {
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-
-var pg = require('pg');
 
 //for passport
 require('./app/routes.js')(app, passport);

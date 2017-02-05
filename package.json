@@ -5,9 +5,9 @@
   "engines": {
     "node": "5.9.1"
   },
-  "main": "pages/index.ejs",
+  "main": "views/pages/index.ejs",
   "scripts": {
-    "start": "node pages/index.ejs"
+    "start": "node views/pages/index.ejs"
   },
   "dependencies": {
     "pg": "4.x",
@@ -19,7 +19,8 @@
     "cookie-parser": "~1.0.0",
     "express-session": "~1.0.0",
     "bcrypt-nodejs" : "latest",
-    "sequelize" : "latest"
+    "sequelize" : "latest", 
+    "body-parser": "~1.0.0"
   },
   "repository": {
     "type": "git",
