@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<% include ../partials/stylesheetLinks %>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+
+  <% include ../partials/nav %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Trends
+        <small>Track your production.</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li class="active">Trends</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+                  <!-- LINE CHART -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Washable Hygiene Kit</h3>
+
+              <div class="box-tools pull-right"> </div>
+            </div>
+            <div class="box-body chart-responsive">
+              <div class="chart" id="line-chart" style="height: 300px;"></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+          <!-- /.box -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+</div>
+<!-- ./wrapper -->
+
+<% include ../partials/scripts %>
+
+</body>
+</html>
+
+<script>
+
+    // LINE CHART
+    var line = new Morris.Line({
+      element: 'line-chart',
+      resize: true,
+      data: [
+        {y: '2014 Q1', item1: 2666},
+        {y: '2014 Q2', item1: 2778},
+        {y: '2014 Q3', item1: 4912},
+        {y: '2014 Q4', item1: 3767},
+        {y: '2015 Q1', item1: 6810},
+        {y: '2015 Q2', item1: 5670},
+        {y: '2015 Q3', item1: 4820},
+        {y: '2015 Q4', item1: 15073},
+        {y: '2016 Q1', item1: 10687},
+        {y: '2016 Q2', item1: 8432}
+      ],
+      xkey: 'y',
+      ykeys: ['item1'],
+      labels: ['Item 1'],
+      lineColors: ['#3c8dbc'],
+      hideHover: 'auto'
+    });
+
+</script>
+
