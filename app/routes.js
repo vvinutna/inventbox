@@ -9,7 +9,7 @@ module.exports = function(app, passport) {
     });
 
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/index', // redirect to the secure profile section
+        successRedirect : '/dashboard', // redirect to the secure profile section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
@@ -53,6 +53,8 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     });
+
+    
 };
 
 function isLoggedIn(req, res, next) {

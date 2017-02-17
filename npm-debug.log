@@ -7,7 +7,7 @@
 6 info start node-js-getting-started@0.2.5
 7 verbose unsafe-perm in lifecycle true
 8 info node-js-getting-started@0.2.5 Failed to exec start script
-9 verbose stack Error: node-js-getting-started@0.2.5 start: `node views/pages/index.ejs`
+9 verbose stack Error: node-js-getting-started@0.2.5 start: `node index.js`
 9 verbose stack Exit status 1
 9 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:217:16)
 9 verbose stack     at emitTwo (events.js:87:13)
@@ -24,13 +24,13 @@
 14 error node v4.4.3
 15 error npm  v2.15.1
 16 error code ELIFECYCLE
-17 error node-js-getting-started@0.2.5 start: `node views/pages/index.ejs`
+17 error node-js-getting-started@0.2.5 start: `node index.js`
 17 error Exit status 1
-18 error Failed at the node-js-getting-started@0.2.5 start script 'node views/pages/index.ejs'.
+18 error Failed at the node-js-getting-started@0.2.5 start script 'node index.js'.
 18 error This is most likely a problem with the node-js-getting-started package,
 18 error not with npm itself.
 18 error Tell the author that this fails on your system:
-18 error     node views/pages/index.ejs
+18 error     node index.js
 18 error You can get information on how to open an issue for this project with:
 18 error     npm bugs node-js-getting-started
 18 error Or if that isn't available, you can get their info via:

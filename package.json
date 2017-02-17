@@ -7,7 +7,7 @@
   },
   "main": "views/pages/index.ejs",
   "scripts": {
-    "start": "node views/pages/index.ejs"
+    "start": "node index.js"
   },
   "dependencies": {
     "pg": "4.x",

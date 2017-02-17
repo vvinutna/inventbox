@@ -158,11 +158,12 @@ Instance.prototype.getDataValue = function(key) {
  * @param {any} value
  */
 Instance.prototype.setDataValue = function(key, value) {
-  var originalValue = this._previousDataValues[key];
+  var originalValue = this.dataValues[key];
   if (!Utils.isPrimitive(value) || value !== originalValue) {
     this.changed(key, true);
   }
 
+  this._previousDataValues[key] = originalValue;
   this.dataValues[key] = value;
 };
 
@@ -650,7 +651,13 @@ Instance.prototype.save = function(options) {
       });
     })
     .then(function() {
-      if (!options.fields.length) return this;
+      var realFields = [];
+      options.fields.forEach(function(field) {
+        if (!self.Model._isVirtualAttribute(field)) {
+          realFields.push(field);
+        }
+      });
+      if (!realFields.length) return this;
       if (!this.changed() && !this.isNewRecord) return this;
 
       var values = Utils.mapValueFieldNames(this.dataValues, options.fields, this.Model)
@@ -729,6 +736,8 @@ Instance.prototype.save = function(options) {
                   var values = {};
                   values[include.association.foreignKey] = self.get(self.Model.primaryKeyAttribute, {raw: true});
                   values[include.association.otherKey] = instance.get(instance.Model.primaryKeyAttribute, {raw: true});
+                  // Include values defined in the scope of the association
+                  _.assign(values, include.association.through.scope);
                   return include.association.throughModel.create(values, includeOptions);
                 });
               } else {

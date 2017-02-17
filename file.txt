@@ -1,0 +1,2 @@
+[OKAY] Loaded ENV .env File as KEY=VALUE Format
+3:04:38 PM web.1 |  Node app is running on port 5000

@@ -16,7 +16,7 @@
     <section class="content-header">
       <h1>
         Add Categories
-        <small>Update the inventory with any new stock.</small>
+        <small>Update the inventory with a new category.</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
@@ -30,30 +30,12 @@
         <div class="box box-primary">
         
         <div>
-        <form role="form">
+        <form id="addCategoryForm" role="form">
               <div class="box-body">
               <div class="form-group">
-                  <label for="input1">Item Name</label>
-                  <input type="text" class="form-control" id="input1" placeholder="Enter name">
+                  <label for="input1">Category Name</label>
+                  <input type="text" class="form-control" id="category" placeholder="Enter category name" name="category">
                   </div>
-                             
-                <div class="form-group">
-                  <label>Select Category</label>
-                  <select class="form-control">
-                    <option>Fabric</option>
-                    <option>Buttons</option>
-                    <option>Accessories</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <div class="form-group" style="width: 25%">
-                  <label for="input2">Quantity</label>
-                  <input type="number" min="1" class="form-control" id="input1" placeholder="">
-                </div>
-                <div class="form-group">
-                    <label for="input1">OR Scan Barcode</label>
-                    <input type="file" accept="image/*" id="capture" capture="camera">
-                </div>
               </div>
               <!-- /.box-body -->
 
@@ -71,6 +53,23 @@
 <!-- ./wrapper -->
 
 <% include ../partials/scripts %>
+
+<script>
+
+  $("#addCategoryForm").submit(function(event) {
+    var form = document.getElementById("addCategoryForm");
+    var categoryName = form.elements[0].value;
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/categories',
+      data: { "category": categoryName }
+    });
+    alert("The category has been added!");
+    return false;
+  });
+
+</script>
 
 </body>
 </html>
