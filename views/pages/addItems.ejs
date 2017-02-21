@@ -45,10 +45,13 @@
 
                   <label>Select Category</label>
                   <select class="form-control">
-                    <option>Fabric</option>
+<!--                     <option>Fabric</option>
                     <option>Buttons</option>
                     <option>Accessories</option>
-                    <option>Other</option>
+                    <option>Other</option> -->
+                    <% results.forEach(function(result) { %>
+                      <option><%= result.category_name %></option>
+                    <% }); %>
                   </select>
                 </div>
                 <div class="form-group" style="width: 25%">
