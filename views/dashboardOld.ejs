@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<% include ../partials/stylesheetLinks %>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+
+  <% include ../partials/nav %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Items
+        <small>Overview</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Items</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+         <div>
+          <h2>Current Inventory</h2>
+        </div>
+        <div>
+          <table style="width:100%">
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th> 
+               <th>Category</th>
+             </tr>
+            
+              <tr>
+                  <td>Name 1</td>
+                  <td>Quantity 1</td> 
+                  <td>Category 1</td>
+              </tr>
+              <tr>
+                  <td>Name 2</td>
+                  <td>Quantity 2</td> 
+                  <td>Category 2</td>
+              </tr>
+          </table>
+          </div> 
+
+    </section>
+    <!-- /.content -->
+  </div>
+
+</div>
+<!-- ./wrapper -->
+
+<% include ../partials/scripts %>
+
+</body>
+</html>

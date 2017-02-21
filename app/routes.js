@@ -22,11 +22,6 @@ module.exports = function(app, passport) {
 
     app.get('/dashboard', function(req, res) {
         // render the page and pass in any flash data if it exists
-        res.render('pages/dashboarddemo.ejs'); 
-    });
-
-    app.get('/index', function(req, res) {
-        // render the page and pass in any flash data if it exists
         res.render('pages/dashboard.ejs'); 
     });
 
@@ -38,7 +33,7 @@ module.exports = function(app, passport) {
     // process the signup form
     // app.post('/signup', do all our passport stuff here);
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/index', // redirect to the secure profile section
+        successRedirect : '/dashboard', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
