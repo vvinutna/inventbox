@@ -114,7 +114,7 @@ app.get('/updateItemsStock', function(request, response) {
       return res.status(500).json({success: false, data: err});
     }
     // SQL Query > Select Data
-    const query = client.query('SELECT * FROM products;');
+    const query = client.query('SELECT * FROM categories;');
     // Stream results back one row at a time
     query.on('row', (row) => {
       items.push(row);
