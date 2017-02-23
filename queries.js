@@ -66,6 +66,25 @@ module.exports = function(app, passport) {
     return res.json();
   });
 
+  app.delete('/api/products/:itemName', (req, res, next) => {
+
+    // Grab data from http request
+    const item_name = req.body.itemName;
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, (err, client, done) => {
+      // Handle connection errors
+      if(err) {
+        done();
+        console.log(err);
+        return res.status(500).json({success: false, data: err});
+      }
+      // SQL Query > Insert Data
+      client.query('DELETE FROM products WHERE item_name=($1)',
+      [item_name]);
+    });
+    return res.json();
+  });
+
   app.post('/api/products', (req, res, next) => {
     console.log("this is happening?");
     // Grab data from http request
