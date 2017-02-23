@@ -80,7 +80,7 @@ module.exports = function(app, passport) {
       }
       // SQL Query > Insert Data
       client.query('DELETE FROM products WHERE name=($1)',
-      [name]);
+      [item_name]);
     });
     return res.json();
   });
