@@ -49,7 +49,7 @@
         <div class="box box-primary">
         <h1>Remove</h1>
         <div>
-          <form id="removeCategoriesForm" role="form">
+          <form id="removeCategoryForm" role="form">
               <div class="box-body">
               <div class="form-group" style="width:25%;">
                 <label>Select Category</label>
@@ -86,8 +86,8 @@
     alert("The category has been added!");
   });
 
-  $("#removeCategoriesForm").submit(function(event) {
-    var form = document.getElementById("removeCategoriesForm");
+  $("#removeCategoryForm").submit(function(event) {
+    var form = document.getElementById("removeCategoryForm");
     var categoryName = form.elements[0].value;
     
     $.ajax({
