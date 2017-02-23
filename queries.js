@@ -66,7 +66,7 @@ module.exports = function(app, passport) {
     return res.json();
   });
 
-  app.delete('/api/products/:itemName', (req, res, next) => {
+  app.delete('/api/products/:name', (req, res, next) => {
 
     // Grab data from http request
     const item_name = req.body.itemName;
@@ -79,7 +79,7 @@ module.exports = function(app, passport) {
         return res.status(500).json({success: false, data: err});
       }
       // SQL Query > Insert Data
-      client.query('DELETE FROM products WHERE name=($1)',
+      client.query('DELETE * FROM products WHERE name=($1)',
       [item_name]);
     });
     return res.json();
