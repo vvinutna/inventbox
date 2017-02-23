@@ -32,16 +32,16 @@
         <div class="box-body">
               <table class="table table-bordered">
                 <tr>
-                  <th>Category</th>
                   <th>Item</th>
+                  <th>Category</th>
                   <th>Units</th>
                   <th>Quantity</th>
                   <!-- <th style="width: 40px">Reorder</th> -->
                 </tr>
                 <% results.forEach(function(result) { %>
                   <tr>
-                    <td><%= result.category_name %></td>
                     <td><%= result.name %></td>
+                    <td><%= result.category_name %></td>
                     <td><%= result.units %></td>
                     <td><%= result.quantity %></td>
                   </tr>
