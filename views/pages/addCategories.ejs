@@ -51,10 +51,11 @@
         <div>
           <form id="removeCategoryForm" role="form">
               <div class="box-body">
+              
               <div class="form-group">
                 <label>Select Category</label>
                 <select class="form-control" style="width: 25%">
-                  <% results.forEach(function(category) { %>
+                  <% results.forEach(function(result) { %>
                     <option><%= results.category_name %></option>
                   <% }); %>
                 </select>
