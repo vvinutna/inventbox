@@ -27,43 +27,55 @@
 
     <!-- Main content -->
     <section class="content">
-        <div class="box box-primary">
-        <h1>Add</h1>
-        <div>
-        <form id="addCategoryForm" role="form">
-              <div class="box-body">
-              <div class="form-group">
-                  <label for="input1">Category Name</label>
-                  <input type="text" class="form-control" id="category" placeholder="Enter category name" name="category" style="width:25%;">
-                  </div>
-              </div>
-              <!-- /.box-body -->
+      <div class="row">
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-            </form>
-        </div>
+        <div class="col-md-6">
+          <div class="box box-primary">
+          <h1>Add</h1>
+          <div>
+          <form id="addCategoryForm" role="form">
+                <div class="box-body">
+                <div class="form-group">
+                    <label for="input1">Category Name</label>
+                    <input type="text" class="form-control" id="category" placeholder="Enter category name" name="category" style="width:25%;">
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
+          </div>
+          </div>
         </div>
 
-        <div class="box box-primary">
-        <h1>Remove</h1>
-        <div>
-          <form id="removeCategoryForm" role="form">
-              <div class="box-body">
-              
-              <div class="form-group">
-                <label>Select Category</label>
-                <select class="form-control" style="width: 25%">
-                  <% results.forEach(function(result) { %>
-                    <option><%= result.category_name %></option>
-                  <% }); %>
-                </select>
-              </div>
-              <!-- /.box-body -->
-            </form>
+        <div class="col-md-6">
+          <div class="box box-primary">
+          <h1>Remove</h1>
+          <div>
+            <form id="removeCategoryForm" role="form">
+                <div class="box-body">
+                
+                <div class="form-group">
+                  <label>Select Category</label>
+                  <select class="form-control" style="width: 25%">
+                    <% results.forEach(function(result) { %>
+                      <option><%= result.category_name %></option>
+                    <% }); %>
+                  </select>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
+          </div>
+          </div>
         </div>
-        </div>
+
+      </div>
     </section>
     <!-- /.content -->
   </div>
