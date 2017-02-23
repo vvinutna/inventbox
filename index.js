@@ -161,7 +161,7 @@ app.get('/addCategories', function(request, response) {
   });
 });
 
-app.get('/updateStockItems', function(request, response) {
+app.get('/updateItemsStock', function(request, response) {
   const results = [];
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
@@ -181,7 +181,7 @@ app.get('/updateStockItems', function(request, response) {
     query.on('end', () => {
       done();
       //return res.json(results);
-      response.render('pages/updateStockItems', { 
+      response.render('pages/updateItemsStock', { 
         results: results
       });
     });
