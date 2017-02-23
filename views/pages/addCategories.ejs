@@ -51,12 +51,6 @@
         <div>
           <form id="removeCategoriesForm" role="form">
               <div class="box-body">
-              <div class="form-group">
-                  <label for="input1">Category Name</label>
-                  <input type="text" class="form-control" id="category" placeholder="Enter category name" name="category" style="width:25%;">
-                  </div>
-              </div>
-
               <div class="form-group" style="width:25%;">
                 <label>Select Category</label>
                 <select class="form-control">
@@ -95,10 +89,11 @@
   $("#removeCategoriesForm").submit(function(event) {
     var form = document.getElementById("removeCategoriesForm");
     var categoryName = form.elements[0].value;
+    
     $.ajax({
       type: 'DELETE',
       url: '/api/categories/' + categoryName,
-      data: { "category": categoryName }
+      data: { "category_name": categoryName }
     });
     alert("The category has been deleted!");
   });
