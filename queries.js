@@ -79,7 +79,7 @@ module.exports = function(app, passport) {
         return res.status(500).json({success: false, data: err});
       }
       // SQL Query > Insert Data
-      client.query('DELETE FROM products WHERE item_name=($1)',
+      client.query('DELETE FROM products WHERE itemName=($1)',
       [item_name]);
     });
     return res.json();

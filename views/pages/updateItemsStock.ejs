@@ -120,8 +120,8 @@
     
     $.ajax({
       type: 'DELETE',
-      url: '/api/categories/' + itemName,
-      data: { "name": itemName }
+      url: '/api/products/' + itemName,
+      data: { itemName : itemName }
     });
     alert("The category has been deleted!");
   });
