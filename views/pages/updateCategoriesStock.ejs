@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<% include ../partials/stylesheetLinks %>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+
+  <% include ../partials/nav %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Update Categories
+        <small>Update the inventory with any changes in stock categories.</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li class="active">Categories</li>
+        <li class="active">Add Categories</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+
+        <div class="col-md-6">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Add a Category</h3>
+            </div>
+          <div>
+          <form id="addCategoryForm" role="form">
+                <div class="box-body">
+                <div class="form-group">
+                    <label for="input1">Category Name</label>
+                    <input type="text" class="form-control" id="category" placeholder="Enter category name" name="category">
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                  <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+              </form>
+          </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Remove a Category</h3>
+            </div>
+          <div>
+            <form id="removeCategoryForm" role="form">
+                <div class="box-body">
+                
+                <div class="form-group">
+                  <label>Select Category</label>
+                  <select class="form-control">
+                    <% results.forEach(function(result) { %>
+                      <option><%= result.category_name %></option>
+                    <% }); %>
+                  </select>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                  <button type="submit" class="btn btn-primary">Remove</button>
+                </div>
+              </form>
+          </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+
+</div>
+<!-- ./wrapper -->
+
+<% include ../partials/scripts %>
+
+<script>
+
+  $("#addCategoryForm").submit(function(event) {
+    var form = document.getElementById("addCategoryForm");
+    var categoryName = form.elements[0].value;
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/categories',
+      data: { "category": categoryName }
+    });
+    alert("The category has been added!");
+  });
+
+  $("#removeCategoryForm").submit(function(event) {
+    var form = document.getElementById("removeCategoryForm");
+    var categoryName = form.elements[0].value;
+    
+    $.ajax({
+      type: 'DELETE',
+      url: '/api/categories/' + categoryName,
+      data: { "category_name": categoryName }
+    });
+    alert("The category has been deleted!");
+  });
+
+</script>
+
+</body>
+</html>
+
