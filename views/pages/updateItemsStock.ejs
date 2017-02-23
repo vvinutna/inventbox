@@ -15,75 +15,80 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Update Items
-        <small>Update the inventory with changes in item stock.</small>
+        Update Categories
+        <small>Update the inventory with any changes in stock categories.</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-        <li class="active">Update Stock</li>
-        <li class="active">Items</li>
+        <li class="active">Categories</li>
+        <li class="active">Add Categories</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
-        <div class="box box-primary">
-          <h1>Add Item</hi>
-        <div>
-        <form id="addItemForm" role="form">
+      <div class="row">
+
+        <div class="col-md-6">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Add an Item</h3>
+            </div>
+          <div>
+          <form role="form" id="newItemForm">
               <div class="box-body">
               <div class="form-group">
                   <label for="input1">Item Name</label>
-                  <input type="text" class="form-control" id="category" placeholder="Enter category name" name="category" style="width:25%;">
+                  <input type="text" class="form-control" id="input1" placeholder="Enter name" style="width:25%;">
                   </div>
-              </div>
-
-              <div class="form-group" style="width:25%;">
-                <label>Select Category</label>
-                <select class="form-control">
-                  <% results.forEach(function(result) { %>
-                    <option><%= result.category_name %></option>
-                  <% }); %>
-                </select>
+                
+                <div class="form-group" style="width:25%;">
+                  <label>Select Category</label>
+                  <select class="form-control">
+                    <% results.forEach(function(result) { %>
+                      <option><%= result.category_name %></option>
+                    <% }); %>
+                  </select>
+                </div>
               </div>
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Add</button>
               </div>
             </form>
-        </div>
+          </div>
+          </div>
         </div>
 
-        <div class="box box-primary">
-        <h1>Remove</hi>
-        <div>
-        <form id="removeItemForm" role="form">
-              <div class="box-body">
+        <div class="col-md-6">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Remove a Category</h3>
+            </div>
+          <div>
+            <form id="removeItemForm" role="form">
+                              <div class="box-body">
               <div class="form-group">
-                  <label for="input1">Item Name</label>
-                  <input type="text" class="form-control" id="category" placeholder="Enter category name" name="category" style="width:25%;">
+                  <label for="input1">Select Item</label>
+                    <select class="form-control">
+                      <% results.forEach(function(result) { %>
+                        <option><%= result.name %></option>
+                      <% }); %>
+                    </select>
                   </div>
-              </div>
-
-              <div class="form-group" style="width:25%;">
-                <label>Select Item</label>
-                <select class="form-control">
-                  <% results.forEach(function(result) { %>
-                    <option><%= result.name %></option>
-                  <% }); %>
-                </select>
               </div>
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Remove</button>
               </div>
-            </form>
-        </div>
+              </form>
+          </div>
+          </div>
         </div>
 
-
+      </div>
     </section>
     <!-- /.content -->
   </div>
@@ -95,13 +100,12 @@
 
 <script>
 
-  $("#addItemForm").submit(function(event) {
-    var form = document.getElementById("addItemForm");
+  $("#newItemForm").submit(function(event) {
+    var form = document.getElementById("newItemForm");
     var itemName = form.elements[0].value;
     console.log(itemName);
     var categoryName = form.elements[1].value;
     console.log(categoryName);
-    
     $.ajax({
       type: 'POST',
       url: '/api/products',
@@ -111,16 +115,16 @@
   });
 
   $("#removeItemForm").submit(function(event) {
-    var form = document.getElementById("removeCategoryForm");
+    var form = document.getElementById("removeItemForm");
     var itemName = form.elements[0].value;
+    
     $.ajax({
       type: 'DELETE',
       url: '/api/categories/' + itemName,
       data: { "name": itemName }
     });
-    alert("The item has been deleted!");
+    alert("The category has been deleted!");
   });
-
 </script>
 
 </body>
