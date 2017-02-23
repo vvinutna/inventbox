@@ -103,8 +103,8 @@ app.get('/updateItems', function(request, response) {
   });
 });
 
-app.get('/updateItemsStock', function(request, response) {
-  const items = [];
+app.get('/updateCategoriesStock', function(request, response) {
+  const results = [];
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
     // Handle connection errors
@@ -114,17 +114,17 @@ app.get('/updateItemsStock', function(request, response) {
       return res.status(500).json({success: false, data: err});
     }
     // SQL Query > Select Data
-    const query = client.query('SELECT * FROM products;');
+    const query = client.query('SELECT * FROM categories;');
     // Stream results back one row at a time
     query.on('row', (row) => {
-      items.push(row);
+      results.push(row);
     });
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
       //return res.json(results);
-      response.render('pages/updateItemsStock', { 
-        items: items
+      response.render('pages/updateCategoriesStock', { 
+        results: results
       });
     });
   });
