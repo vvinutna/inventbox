@@ -35,7 +35,7 @@ module.exports = function(app) {
         return res.status(500).json({success: false, data: err});
       }
       // SQL Query > Insert Data
-      client.query('DELETE FROM categories WHERE category_name=($1)',
+      client.query('DELETE FROM categories WHERE category_name=($1);',
       [category_name]);
     });
     return res.json();
@@ -146,6 +146,7 @@ module.exports = function(app) {
           inventories.on('row', (row) => { 
             done();
             sum.push(row);
+            console.log(sum);
             return res.json(sum);
           }); 
         }); 

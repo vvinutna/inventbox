@@ -92,6 +92,7 @@
       data: { startDate: startDate, endDate: endDate, item: item, category: category },
       success: function (data) {
         var quant = data[0].sum;
+        console.log(quant);
         if (!quant) {
           quant = 0;
         }
