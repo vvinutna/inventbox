@@ -1,7 +1,8 @@
 const connectionString = 'postgres://wsjlyhcniawoyr:cf2K6zizjThAweZ19mCPA6NWlp@ec2-54-235-246-220.compute-1.amazonaws.com:5432/d5cgikmoltlg1b?ssl=true';
 var pg = require('pg');
 
-module.exports = function(app, passport) {
+module.exports = function(app) {
+
   app.post('/api/categories', (req, res, next) => {
 
     // Grab data from http request
@@ -59,7 +60,7 @@ module.exports = function(app, passport) {
       const query1 = client.query('SELECT * FROM products WHERE name=($1);', [name]);
       // Stream results back one row at a time
       query1.on('row', (row) => {
-        client.query('UPDATE daily_inventory SET day_date=NOW(), quantity=quantity + ($1) WHERE product_id=($2)',
+        client.query('INSERT INTO daily_inventory(day_date, product_id, quantity) values(NOW(), $2, $1);',
         [quantity, row.product_id]);
       });
     });
@@ -67,7 +68,6 @@ module.exports = function(app, passport) {
   });
 
   app.post('/api/products', (req, res, next) => {
-    console.log("this is happening?");
     // Grab data from http request
     const data = {itemName: req.body.itemName, categoryName: req.body.categoryName, quantity: req.body.quantity, units: req.body.units};
     console.log(data.itemName);
@@ -90,10 +90,47 @@ module.exports = function(app, passport) {
         });
 
         query.on("row", function (row, result) {
-          console.log(row);
           client.query('INSERT INTO daily_inventory(day_date, product_id, quantity) values(NOW(), $1, $2)', [row.product_id, data.quantity]);
         });
       });     
+    });
+  });
+
+  app.post('/api/daily_inventory', (req, res, next) => {
+    var sum = [];
+    // Grab data from http request
+    const data = {startDate: req.body.startDate, endDate: req.body.endDate, item: req.body.item, category: req.body.category};
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, (err, client, done) => {
+      // Handle connection errors
+      if(err) {
+        done();
+        console.log(err);
+        return res.status(500).json({success: false, data: err});
+      }
+
+      //get product id of item
+      //get all inventories for that product, between the date range, with negative quantities
+      //add all results
+      const category = client.query('SELECT category_id FROM categories WHERE category_name=($1);', [data.category]);
+      category.on('row', (row) => {
+        done();
+        var categoryID = row.category_id;
+        
+        const product = client.query('SELECT product_id FROM products WHERE name=($1) and category_id=($2);', [data.item, categoryID]);
+        product.on('row', (row) => {
+          done();
+          var productID = row.product_id;
+
+          const inventories = client.query("SELECT SUM(quantity) from daily_inventory where product_id=($1) and quantity < 0 and day_date >= ($2)::date and day_date <= ($3)::date;", [productID, data.startDate, data.endDate]);
+          // Stream results back one row at a time
+          inventories.on('row', (row) => { 
+            done();
+            sum.push(row);
+            return res.json(sum);
+          }); 
+        }); 
+      });    
     });
   });
 }
