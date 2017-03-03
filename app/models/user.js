@@ -48,7 +48,6 @@ function User() {
                 console.log(err);
                 return console.error('error running query', err);
             }
-            console.log(result.rows);
             //console.log(this.email);
         });
         client.query('SELECT * FROM users ORDER BY u_id desc limit 1', null, function(err, result){
@@ -75,12 +74,12 @@ User.findOne = function(email, password, callback){
     var conString = "postgres://wsjlyhcniawoyr:cf2K6zizjThAweZ19mCPA6NWlp@ec2-54-235-246-220.compute-1.amazonaws.com:5432/d5cgikmoltlg1b?ssl=true";
     var client = new pg.Client(conString);
 
+    console.log("beginning of findone");
+
     var isNotAvailable = false; //we are assuming the email is taking
     //var email = this.email;
     //var rowresult = false;
-    console.log("error?", typeof email);
-    //email = "\'" + email + "\'";
-    console.log(email);
+
     //check if there is a user available for this email;
     client.connect();
     //client.connect(function(err) {
@@ -91,37 +90,25 @@ User.findOne = function(email, password, callback){
     //    }
 
     client.query("SELECT * from users where email=$1", [email], function(err, result){
-        console.log(client.query);
         if(err){
+            console.log('error');
             return callback(err, isNotAvailable, this);
         }
-        console.log(result);
         //if no rows were returned from query, then new user
         if (result.rows.length > 0){
-            isNotAvailable = true; // update the user for return in callback
-            ///email = email;
-            //password = result.rows[0].password;
-            console.log(email + ' is not available!');
-            console.log(password);
-            console.log(result.rows[0].password);
             if (password === result.rows[0].password) {
-            	isNotAvailable = false;
+                isNotAvailable = true;
             }
         }
         else{
             isNotAvailable = false;
-            //email = email;
-            console.log(email + ' is available');
         }
         //the callback has 3 parameters:
         // parameter err: false if there is no error
         //parameter isNotAvailable: whether the email is available or not
         // parameter this: the User object;
-
         client.end();
         return callback(false, isNotAvailable, this);
-
-
     });
 //});
 };

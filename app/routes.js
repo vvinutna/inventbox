@@ -14,6 +14,16 @@ module.exports = function(app, passport) {
         failureFlash : true // allow flash messages
     }));
 
+    // app.post('/login', function(req, res, next) {
+    //     console.log(req.url);
+    //     passport.authenticate('local-login', function(err, user, info) {
+    //         console.log("authenticate");
+    //         console.log(err);
+    //         console.log(user);
+    //         console.log(info);
+    //     })(req, res, next);
+    // });
+
     app.get('/signup', function(req, res) {
 
         // render the page and pass in any flash data if it exists
