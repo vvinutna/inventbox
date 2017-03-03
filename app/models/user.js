@@ -74,8 +74,6 @@ User.findOne = function(email, password, callback){
     var conString = "postgres://wsjlyhcniawoyr:cf2K6zizjThAweZ19mCPA6NWlp@ec2-54-235-246-220.compute-1.amazonaws.com:5432/d5cgikmoltlg1b?ssl=true";
     var client = new pg.Client(conString);
 
-    console.log("beginning of findone");
-
     var isNotAvailable = false; //we are assuming the email is taking
     //var email = this.email;
     //var rowresult = false;

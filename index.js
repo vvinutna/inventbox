@@ -77,7 +77,45 @@ app.get('/logout', function(request, response) {
   });
 });*/
 
-app.get('/updateItems', function(request, response) {
+function isLoggedIn(req, res, next) {
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
+
+app.get('/dashboard', isLoggedIn, function(request, response, next) {
+  const results = [];
+  // Get a Postgres client from the connection pool
+  pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+    // SQL Query > Select Data
+    const query = client.query('SELECT name, category_name, units, SUM(quantity) as quantity FROM (SELECT d.day_date, c.category_name, p.name, p.units, d.quantity FROM categories c INNER JOIN ' +
+      'products p on c.category_id=p.category_id INNER JOIN daily_inventory d on p.product_id=d.product_id) as dash GROUP BY name, category_name, units ORDER BY category_name;');
+    // Stream results back one row at a time
+    query.on('row', (row) => {
+      results.push(row);
+    });
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      //return res.json(results);
+      response.render('pages/dashboard', { 
+        results: results, 
+        user: request.user
+      });
+    });
+  });
+});
+
+app.get('/updateItems', isLoggedIn, function(request, response) {
   const items = [];
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
@@ -105,7 +143,7 @@ app.get('/updateItems', function(request, response) {
 });
 
 
-app.get('/usage', function(request, response) {
+app.get('/usage', isLoggedIn, function(request, response) {
   const results = [];
   const categories = [];
   // Get a Postgres client from the connection pool
@@ -144,7 +182,7 @@ app.get('/usage', function(request, response) {
   });
 });
 
-app.get('/updateCategoriesStock', function(request, response) {
+app.get('/updateCategoriesStock', isLoggedIn, function(request, response) {
   const results = [];
   pg.connect(connectionString, (err, client, done) => {
     // Handle connection errors
@@ -173,7 +211,7 @@ app.get('/updateCategoriesStock', function(request, response) {
 //   response.render('pages/addCategories');
 // });
 
-app.get('/addCategories', function(request, response) {
+app.get('/addCategories', isLoggedIn, function(request, response) {
   const results = [];
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
@@ -200,7 +238,7 @@ app.get('/addCategories', function(request, response) {
   });
 });
 
-app.get('/updateItemsStock', function(request, response) {
+app.get('/updateItemsStock', isLoggedIn, function(request, response) {
   const results = [];
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
@@ -227,7 +265,7 @@ app.get('/updateItemsStock', function(request, response) {
   });
 });
 
-app.get('/addItems', function(request, response) {
+app.get('/addItems', isLoggedIn, function(request, response) {
   const results = [];
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
@@ -254,7 +292,7 @@ app.get('/addItems', function(request, response) {
   });
 });
 
-app.get('/removeCategories', function(request, response) {
+app.get('/removeCategories', isLoggedIn, function(request, response) {
   const results = [];
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
@@ -275,34 +313,6 @@ app.get('/removeCategories', function(request, response) {
       done();
       //return res.json(results);
       response.render('pages/removeCategories', { 
-        results: results
-      });
-    });
-  });
-});
-
-app.get('/dashboard', function(request, response) {
-  const results = [];
-  // Get a Postgres client from the connection pool
-  pg.connect(connectionString, (err, client, done) => {
-    // Handle connection errors
-    if(err) {
-      done();
-      console.log(err);
-      return res.status(500).json({success: false, data: err});
-    }
-    // SQL Query > Select Data
-    const query = client.query('SELECT name, category_name, units, SUM(quantity) as quantity FROM (SELECT d.day_date, c.category_name, p.name, p.units, d.quantity FROM categories c INNER JOIN ' +
-      'products p on c.category_id=p.category_id INNER JOIN daily_inventory d on p.product_id=d.product_id) as dash GROUP BY name, category_name, units ORDER BY category_name;');
-    // Stream results back one row at a time
-    query.on('row', (row) => {
-      results.push(row);
-    });
-    // After all data is returned, close connection and return results
-    query.on('end', () => {
-      done();
-      //return res.json(results);
-      response.render('pages/dashboard', { 
         results: results
       });
     });
