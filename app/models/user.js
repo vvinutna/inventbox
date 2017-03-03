@@ -98,7 +98,7 @@ User.findOne = function(email, password, callback){
                 isNotAvailable = true;
             }
         }
-        else{
+        else {
             isNotAvailable = false;
         }
         //the callback has 3 parameters:
@@ -106,30 +106,26 @@ User.findOne = function(email, password, callback){
         //parameter isNotAvailable: whether the email is available or not
         // parameter this: the User object;
         client.end();
-        return callback(false, isNotAvailable, this);
+        return callback(false, isNotAvailable, result.rows[0]);
     });
 //});
 };
 
 User.findById = function(id, callback){
-    console.log("we are in findbyid");
     var conString = "postgres://wsjlyhcniawoyr:cf2K6zizjThAweZ19mCPA6NWlp@ec2-54-235-246-220.compute-1.amazonaws.com:5432/d5cgikmoltlg1b?ssl=true";
     var client = new pg.Client(conString);
 
     client.connect();
     client.query("SELECT * from users where u_id=$1", [id], function(err, result){
-
         if(err){
             return callback(err, null);
         }
         //if no rows were returned from query, then new user
         if (result.rows.length > 0){
-            console.log(result.rows[0] + ' is found!');
             var user = new User();
             user.email= result.rows[0]['email'];
             user.password = result.rows[0]['password'];
             user.u_id = result.rows[0]['u_id'];
-            console.log(user.email);
             return callback(null, user);
         }
     });

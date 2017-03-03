@@ -21,17 +21,17 @@ module.exports = function(passport) {
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
         //console.log(user.u_id +" was seralized");
-        //done(null, user.u_id);
-        done(null, user);
+        done(null, user.u_id);
+        //done(null, user);
     });
 
     // used to deserialize the user
     passport.deserializeUser(function(user, done) {
         //console.log(id + "is deserialized");
-        //User.findById(id, function(err, user) {
-            //done(err, user);
-        //});
-        done(null, user);
+        User.findById(user, function(err, user) {
+            done(err, user);
+        });
+        //done(null, user);
     });
 
     // =========================================================================
@@ -112,13 +112,13 @@ module.exports = function(passport) {
         function(req, email, password, done) { // callback with email and password from our form
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
-            User.findOne(email, password, function(err, user) {
+            User.findOne(email, password, function(err, isNotAvailable, user) {
                 // if there are any errors, return the error before anything else
                 if (err)
                     return done(err);
 
                 // if no user is found, return the message
-                if (!user)
+                if (!isNotAvailable)
                     return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
 
                 // if the user is found but the password is wrong

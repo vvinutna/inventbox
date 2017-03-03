@@ -2,6 +2,11 @@ var pg = require('pg');
 var express = require('express');
 var app = express();
 
+app.use(express.static(__dirname + '/public'));
+
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 var bodyParser = require( 'body-parser' );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -9,13 +14,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //for passport
 var passport = require('passport');
 var flash    = require('connect-flash');
-var cookieParser = require('cookie-parser');
 var session = require('express-session');
-app.use(cookieParser());
 
 app.set('port', (process.env.PORT || 5000));
-
-app.use(express.static(__dirname + '/public'));
 
 //for passport
 require('./config/passport')(passport);
@@ -109,7 +110,7 @@ app.get('/dashboard', isLoggedIn, function(request, response, next) {
       //return res.json(results);
       response.render('pages/dashboard', { 
         results: results, 
-        user: request.user
+        email: request.user.email
       });
     });
   });
@@ -136,7 +137,8 @@ app.get('/updateItems', isLoggedIn, function(request, response) {
       done();
       //return res.json(results);
       response.render('pages/updateItems', { 
-        items: items
+        items: items,
+        email: request.user.email
       });
     });
   });
@@ -176,7 +178,8 @@ app.get('/usage', isLoggedIn, function(request, response) {
       //return res.json(results);
       response.render('pages/usage', { 
         results: results,
-        categories: categories
+        categories: categories,
+        email: request.user.email
       });
     });
   });
@@ -201,7 +204,8 @@ app.get('/updateCategoriesStock', isLoggedIn, function(request, response) {
       done();
       //return res.json(results);
       response.render('pages/updateCategoriesStock', { 
-        results: results
+        results: results,
+        email: request.user.email
       });
     });
   });
@@ -232,7 +236,8 @@ app.get('/addCategories', isLoggedIn, function(request, response) {
       done();
       //return res.json(results);
       response.render('pages/addCategories', { 
-        results: results
+        results: results,
+        email: request.user.email
       });
     });
   });
@@ -259,7 +264,8 @@ app.get('/updateItemsStock', isLoggedIn, function(request, response) {
       done();
       //return res.json(results);
       response.render('pages/updateItemsStock', { 
-        results: results
+        results: results,
+        email: request.user.email
       });
     });
   });
@@ -286,7 +292,8 @@ app.get('/addItems', isLoggedIn, function(request, response) {
       done();
       //return res.json(results);
       response.render('pages/addItems', { 
-        results: results
+        results: results,
+        email: request.user.email
       });
     });
   });
@@ -313,7 +320,8 @@ app.get('/removeCategories', isLoggedIn, function(request, response) {
       done();
       //return res.json(results);
       response.render('pages/removeCategories', { 
-        results: results
+        results: results,
+        email: request.user.email
       });
     });
   });
