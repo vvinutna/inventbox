@@ -116,7 +116,7 @@ app.get('/dashboard', isLoggedIn, function(request, response, next) {
   });
 });
 
-app.get('/updateItems', isLoggedIn, function(request, response) {
+app.get('/updateStock', isLoggedIn, function(request, response) {
   const items = [];
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
