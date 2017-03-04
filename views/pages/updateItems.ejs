@@ -33,7 +33,7 @@
               <div class="box-body">   
                 <div class="form-group">
                   <label>Select Item</label>
-                  <select class="form-control" style="width: 25%" required>
+                  <select class="form-control" style="width: 25%" required="required">
                     <% items.forEach(function(item) { %>
                       <option><%= item.name %></option>
                     <% }); %>
@@ -43,7 +43,7 @@
 
                 <div class="form-group" style="width: 25%">
                   <label for="quantity">Quantity</label>
-                  <input type="number" class="form-control" id="quantity" placeholder="" required>
+                  <input type="number" class="form-control" id="quantity" placeholder="" required="required">
                 </div>
 <!--                 <div class="form-group">
                   <label for="capture">OR Scan Barcode</label>
@@ -65,7 +65,7 @@
 
 </div>
 <!-- ./wrapper -->
-
+required
 <% include ../partials/scripts %>
 
 <script>
@@ -94,9 +94,15 @@
     $.ajax({
         type: 'PUT',
         url: '/api/daily_inventory/' + itemName,
-        data: { itemName: itemName, quantity: quantity }
+        data: { itemName: itemName, quantity: quantity },
+        success: function (data) {
+          alert("The inventory has been updated!");
+        },
+        error: function (data) {
+          alert("Something went wrong, please try calculating usage again!");
+        }
       });
-      alert("The inventory has been updated!");
+
     }
 
 

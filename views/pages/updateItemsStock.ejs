@@ -39,15 +39,15 @@
               <div class="box-body">
               <div class="form-group">
                   <label for="input1">Item Name</label>
-                  <input type="text" class="form-control" id="input1" placeholder="Enter name" required>
+                  <input type="text" class="form-control" id="input1" placeholder="Enter name" required="required">
               </div>
               <div class="form-group">
                 <label for="input2">Units</label>
-                <input type="text" class="form-control" id="input2" placeholder="Enter units" required>
+                <input type="text" class="form-control" id="input2" placeholder="Enter units" required="required">
               </div>
               <div class="form-group">
                   <label>Select Category</label>
-                  <select class="form-control" required>
+                  <select class="form-control" required="required">
                     <% results.forEach(function(result) { %>
                       <option><%= result.category_name %></option>
                     <% }); %>
@@ -74,7 +74,7 @@
                               <div class="box-body">
               <div class="form-group">
                   <label for="input1">Select Item</label>
-                    <select class="form-control" required>
+                    <select class="form-control" required="required">
                       <% results.forEach(function(result) { %>
                         <option><%= result.name %></option>
                       <% }); %>
@@ -113,9 +113,15 @@
     $.ajax({
       type: 'POST',
       url: '/api/products',
-      data: { itemName: itemName, categoryName: categoryName, units: units}
+      data: { itemName: itemName, categoryName: categoryName, units: units},
+      success: function(data) {
+        alert("The new item has been added!");
+      },
+      error: function (data) {
+        alert("Something went wrong, please try calculating usage again!");
+      }
     });
-    alert("The new item has been added!");
+
   });
 
   $("#removeItemForm").submit(function(event) {
