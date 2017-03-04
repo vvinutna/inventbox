@@ -52,8 +52,8 @@
                 <!-- /.box-body -->
 
               <div class="box-footer">
-                <button id="add" class="btn btn-primary">Add</button>
-                <button id="remove" class="btn btn-primary">Remove</button>
+                <button id="add" class="btn btn-primary" width="25px">Add</button>
+                <button id="remove" class="btn btn-primary" width="25px">Remove</button>
               </div>
             </form>
           </div>
@@ -74,7 +74,7 @@
     var form = document.getElementById("updateItemForm");
     var itemName = form.elements[0].value;
     console.log(itemName);
-    var quantity = (-1) * form.elements[1].value;
+    var quantity = form.elements[1].value;
     console.log(quantity);
     $.ajax({
       type: 'PUT',
@@ -89,7 +89,7 @@
     var form = document.getElementById("updateItemForm");
     var itemName = form.elements[0].value;
     console.log(itemName);
-    var quantity = form.elements[1].value;
+    var quantity = (-1) * form.elements[1].value;
     console.log(quantity);
     $.ajax({
       type: 'PUT',
