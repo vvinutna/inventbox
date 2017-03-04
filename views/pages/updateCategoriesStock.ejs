@@ -39,7 +39,7 @@
                 <div class="box-body">
                 <div class="form-group">
                     <label for="input1">Category Name</label>
-                    <input type="text" class="form-control" id="category" placeholder="Enter category name" name="category">
+                    <input type="text" class="form-control" id="category" placeholder="Enter category name" name="category" required>
                     </div>
                 </div>
                 <!-- /.box-body -->
@@ -63,7 +63,7 @@
                 
                 <div class="form-group">
                   <label>Select Category</label>
-                  <select class="form-control">
+                  <select class="form-control" required>
                     <% results.forEach(function(result) { %>
                       <option><%= result.category_name %></option>
                     <% }); %>

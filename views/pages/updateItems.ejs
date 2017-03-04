@@ -33,7 +33,7 @@
               <div class="box-body">   
                 <div class="form-group">
                   <label>Select Item</label>
-                  <select class="form-control" style="width: 25%">
+                  <select class="form-control" style="width: 25%" required>
                     <% items.forEach(function(item) { %>
                       <option><%= item.name %></option>
                     <% }); %>
@@ -43,7 +43,7 @@
 
                 <div class="form-group" style="width: 25%">
                   <label for="quantity">Quantity</label>
-                  <input type="number" class="form-control" id="quantity" placeholder="">
+                  <input type="number" class="form-control" id="quantity" placeholder="" required>
                 </div>
 <!--                 <div class="form-group">
                   <label for="capture">OR Scan Barcode</label>
@@ -98,23 +98,6 @@
       });
       alert("The inventory has been updated!");
     }
-
-
-  // $("#updateItemForm").submit(function(event) {
-  //   var form = document.getElementById("updateItemForm");
-  //   var itemName = form.elements[0].value;
-  //   console.log(itemName);
-  //   var quantity = form.elements[1].value;
-  //   console.log(quantity);
-  //   $.ajax({
-  //     type: 'PUT',
-  //     url: '/api/daily_inventory/' + itemName,
-  //     data: { itemName: itemName, quantity: quantity }
-  //   });
-  //   alert("The inventory has been updated!");
-  // });
-
-
 
 </script>
 
