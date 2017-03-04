@@ -59,8 +59,12 @@ module.exports = function(app) {
       console.log(name);
       const query1 = client.query('SELECT * FROM products WHERE name=($1);', [name]);
       // Stream results back one row at a time
+      // query1.on('row', (row) => {
+      //   client.query('INSERT INTO daily_inventory(day_date, product_id, quantity) values(NOW(), $2, $1);',
+      //   [quantity, row.product_id]);
+      // });
       query1.on('row', (row) => {
-        client.query('INSERT INTO daily_inventory(day_date, product_id, quantity) values(NOW(), $2, $1);',
+        client.query('UPDATE daily_inventory SET day_date=NOW(), quantity=quantity + ($1) WHERE product_id=($2) and quantity > 0',
         [quantity, row.product_id]);
       });
     });
