@@ -87,25 +87,26 @@
   var removeButton = document.getElementById("remove");
   removeButton.onclick = function() {
 
-    // $.ajax({
-    //   type: 'GET',
-    //   url: '/api/daily_inventory/' +itemName,
-    //   data: '',
-    //   success: function(data) {
-    //     var currStock = 
-    //   } 
-    // })
     var form = document.getElementById("updateItemForm");
     var itemName = form.elements[0].value;
-    console.log(itemName);
-    var quantity = (-1) * form.elements[1].value;
-    console.log(quantity);
-    $.ajax({
-      type: 'PUT',
-      url: '/api/daily_inventory/' + itemName,
-      data: { itemName: itemName, quantity: quantity }
-    });
-    alert("The inventory has been updated!");
+    var quantity = form.elements[1].value;
+
+    items.foreach(function(item) {
+      if(item.name == itemName) {
+        if item.quantity < quantity {
+          alert("Invalid input. Not enough items in current inventory!");
+        } else {
+          $.ajax({
+            type: 'PUT',
+            url: '/api/daily_inventory/' + itemName,
+            data: { itemName: itemName, quantity: quantity }
+          });
+          alert("The inventory has been updated!");
+        }
+
+      }
+    })
+
   }
 
 
