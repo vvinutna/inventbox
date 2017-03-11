@@ -46,6 +46,10 @@
                 <input type="text" class="form-control" id="input2" placeholder="Enter units" required="required">
               </div>
               <div class="form-group">
+                <label for="input3">Reorder Quantity</label>
+                <input type="number" class="form-control" id="input3" placeholder="Enter reorder quantity" required"required">
+              </div>
+              <div class="form-group">
                   <label>Select Category</label>
                   <select class="form-control" required="required">
                     <% results.forEach(function(result) { %>
@@ -109,11 +113,12 @@
     console.log(itemName);
     var units = form.elements[1].value;
     var categoryName = form.elements[2].value;
+    var reorderQuantity = form.elements[3].value;
     console.log(categoryName);
     $.ajax({
       type: 'POST',
       url: '/api/products',
-      data: { itemName: itemName, categoryName: categoryName, units: units},
+      data: { itemName: itemName, categoryName: categoryName, units: units, reorderQuantity: reorderQuantity},
       success: function(data) {
         alert("The new item has been added!");
       },

@@ -37,6 +37,7 @@
                   <th>Category</th>
                   <th>Units</th>
                   <th>Current Quantity</th>
+                  <th>Reorder Quantity</th>
                   <!-- <th style="width: 40px">Reorder</th> -->
                 </tr>
                 <% results.forEach(function(result) { %>
@@ -45,6 +46,7 @@
                     <td><%= result.category_name %></td>
                     <td><%= result.units %></td>
                     <td><%= result.quantity %></td>
+                    <td><%= result.reorderQuantity %></td>
                   </tr>
                 <% }); %>
               </table>
@@ -60,6 +62,12 @@
 <!-- ./wrapper -->
 
 <% include ../partials/scripts %>
+
+<script>
+
+
+
+</script>
 
 </body>
 </html>
