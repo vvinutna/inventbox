@@ -89,7 +89,7 @@ module.exports = function(app) {
 
   app.post('/api/products', (req, res, next) => {
     // Grab data from http request
-    const data = {itemName: req.body.itemName, categoryName: req.body.categoryName, quantity: req.body.quantity, units: req.body.units, reorderQuantity: req.body.reorderQuantity};
+    const data = {itemName: req.body.itemName, categoryName: req.body.categoryName, quantity: req.body.quantity, units: req.body.units};
     console.log(data.itemName);
     console.log(req.body.itemName);
     // Get a Postgres client from the connection pool
@@ -104,8 +104,8 @@ module.exports = function(app) {
       const query1 = client.query('SELECT category_id FROM categories WHERE category_name=($1);', [data.categoryName]);
       // Stream results back one row at a time
       query1.on('row', (row) => {
-        var queryString = 'INSERT INTO products(category_id, name, units, reorder_point) values($1, $2, $3, $4) RETURNING *;';
-        var query = client.query(queryString, [row.category_id, data.itemName, data.units, data.reorderQuantity], function (error, result) {
+        var queryString = 'INSERT INTO products(category_id, name, units) values($1, $2, $3) RETURNING *;';
+        var query = client.query(queryString, [row.category_id, data.itemName, data.units], function (error, result) {
             done();
         });
 

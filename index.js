@@ -98,13 +98,12 @@ app.get('/dashboard', isLoggedIn, function(request, response, next) {
       return res.status(500).json({success: false, data: err});
     }
     // SQL Query > Select Data
-    const query = client.query('SELECT name, category_name, units, reorder_point, SUM(quantity) as quantity FROM (SELECT d.day_date, c.category_name, p.name, p.units, d.quantity FROM categories c INNER JOIN ' +
+    const query = client.query('SELECT name, category_name, units, SUM(quantity) as quantity FROM (SELECT d.day_date, c.category_name, p.name, p.units, d.quantity FROM categories c INNER JOIN ' +
       'products p on c.category_id=p.category_id INNER JOIN daily_inventory d on p.product_id=d.product_id) as dash GROUP BY name, category_name, units ORDER BY category_name;');
     // Stream results back one row at a time
     query.on('row', (row) => {
       results.push(row);
     });
-
     // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
