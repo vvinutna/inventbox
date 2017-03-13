@@ -26,31 +26,61 @@
 
     <!-- Main content -->
     <section class="content">
+        <div style="width:400px" class="box box-widget widget-user-2">
+          <!-- Add the bg color to the header using any of the bg-* classes -->
+          <div style="height: 40px" class="bg-red">
+            <h4 style="padding-left: 10px; padding-top: 10px;"><i style="padding-right: 10px;" class="fa fa-fw fa-exclamation-circle"></i>Reorder List</h4>
+          </div>
+          <div class="box-footer no-padding">
+            <ul class="nav nav-stacked">
+            <% results.forEach(function(result) { %>
+              <% if (result.quantity < result.reorder_point) { %>
+                <li><a><%= result.name %></a></li>
+              <% } %>
+            <% });%>
+            </ul>
+          </div>
+        </div>
+
         <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title">Inventory</h3>
-            </div>
-        <div class="box-body">
-              <table class="table table-bordered">
-                <tr>
-                  <th>Item</th>
-                  <th>Category</th>
-                  <th>Units</th>
-                  <th>Current Quantity</th>
-                  <!-- <th style="width: 40px">Reorder</th> -->
-                </tr>
-                <% results.forEach(function(result) { %>
+          <div class="box-header with-border">
+            <h3 class="box-title">Inventory</h3>
+          </div>
+          <div class="box-body">
+                <table class="table table-bordered">
                   <tr>
-                    <td><%= result.name %></td>
-                    <td><%= result.category_name %></td>
-                    <td><%= result.units %></td>
-                    <td><%= result.quantity %></td>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Units</th>
+                    <th>Current Quantity</th>
+                    <th style="width: 25px;">Reorder Progress</th>
                   </tr>
-                <% }); %>
-              </table>
+                  <% results.forEach(function(result) { %>
+                    <tr>
+                      <td><%= result.name %></td>
+                      <td><%= result.category_name %></td>
+                      <td><%= result.units %></td>
+                      <td class="quantity"><%= result.quantity %></td>
+                      <td>
+                        <div class="progress progress-xs">
+                          <% if (result.quantity < result.reorder_point) { %>
+                              <div class="progress-bar progress-bar-danger" style="width: 30%"></div>
+                          <% } else if (result.reorder_point < result.quantity && result.quantity < (result.reorder_point + 10)) { %>
+                              <div class="progress-bar progress-bar-yellow" style="width: 50%"></div>
+                          <% } else { %>
+                              <div class="progress-bar progress-bar-success" style="width: 80%"></div>
+                          <% } %>
+                        </div>
+                      </td>
+
+                    </tr>                
+                  <% }); %>
+                </table>
             </div>
           </div>
           <!-- /.box -->
+
+
           
     </section>
     <!-- /.content -->
@@ -63,4 +93,9 @@
 
 </body>
 </html>
+
+// <script>
+//   document.getElementById("reorderwidgetcolor").style.height = "" + document.getElementById("reorderwidgettext").style.height;
+// </script>
+
 

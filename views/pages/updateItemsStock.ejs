@@ -46,6 +46,10 @@
                 <input type="text" class="form-control" id="input2" placeholder="Enter units" required="required">
               </div>
               <div class="form-group">
+                <label for="input3">Reorder Quantity</label>
+                <input type="number" class="form-control" id="input3" placeholder="Enter reorder quantity" required="required">
+              </div>
+              <div class="form-group">
                   <label>Select Category</label>
                   <select class="form-control" required="required">
                     <% results.forEach(function(result) { %>
@@ -108,20 +112,15 @@
     var itemName = form.elements[0].value;
     console.log(itemName);
     var units = form.elements[1].value;
-    var categoryName = form.elements[2].value;
+    var reorderQuantity = form.elements[2].value;
+    var categoryName = form.elements[3].value;
     console.log(categoryName);
     $.ajax({
       type: 'POST',
       url: '/api/products',
       data: { itemName: itemName, categoryName: categoryName, units: units},
-      success: function(data) {
-        alert("The new item has been added!");
-      },
-      error: function (data) {
-        alert("Something went wrong, please try calculating usage again!");
-      }
     });
-
+    alert("The new item has been added!");
   });
 
   $("#removeItemForm").submit(function(event) {
@@ -133,7 +132,7 @@
       url: '/api/products/' + itemName,
       data: { itemName : itemName }
     });
-    alert("The category has been deleted!");
+    alert("The item has been deleted!");
   });
 </script>
 
