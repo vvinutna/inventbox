@@ -6,7 +6,8 @@ module.exports = function(app) {
   app.post('/api/categories', (req, res, next) => {
 
     // Grab data from http request
-    const data = {category: req.body.category};
+    const data = {category: req.body.category, uid: req.body.uid};
+    console.log(data.uid);
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
       // Handle connection errors
@@ -16,8 +17,8 @@ module.exports = function(app) {
         return res.status(500).json({success: false, data: err});
       }
       // SQL Query > Insert Data
-      client.query('INSERT INTO categories(category_name) values($1)',
-      [data.category]);
+      client.query('INSERT INTO categories(category_name, u_id) values($1, $2)',
+      [data.category, data.uid]);
     });
     return res.json();
   });
@@ -26,6 +27,7 @@ module.exports = function(app) {
 
     // Grab data from http request
     const category_name = req.body.category_name;
+    const uid = req.body.uid;
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
       // Handle connection errors
@@ -35,8 +37,8 @@ module.exports = function(app) {
         return res.status(500).json({success: false, data: err});
       }
       // SQL Query > Insert Data
-      client.query('DELETE FROM categories WHERE category_name=($1);',
-      [category_name]);
+      client.query('DELETE FROM categories WHERE category_name=($1) and u_id=($2);',
+      [category_name, uid]);
     });
     return res.json();
   });
@@ -48,6 +50,7 @@ module.exports = function(app) {
     console.log(name);
     const quantity = req.body.quantity;
     console.log(quantity);
+    const uid = req.body.uid;
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
       // Handle connection errors
@@ -57,11 +60,11 @@ module.exports = function(app) {
         return res.status(500).json({success: false, data: err});
       }
       console.log(name);
-      const query1 = client.query('SELECT * FROM products WHERE name=($1);', [name]);
+      const query1 = client.query('SELECT * FROM products WHERE name=($1) and u_id=($2);', [name, uid]);
       // Stream results back one row at a time
       query1.on('row', (row) => {
-        client.query('INSERT INTO daily_inventory(day_date, product_id, quantity) values(NOW(), $2, $1);',
-        [quantity, row.product_id]);
+        client.query('INSERT INTO daily_inventory(day_date, product_id, quantity, u_id) values(NOW(), $2, $1, $3);',
+        [quantity, row.product_id, uid]);
       });
 
     });
@@ -89,9 +92,10 @@ module.exports = function(app) {
 
   app.post('/api/products', (req, res, next) => {
     // Grab data from http request
-    const data = {itemName: req.body.itemName, categoryName: req.body.categoryName, quantity: req.body.quantity, units: req.body.units, reorderQuantity: req.body.reorderQuantity};
+    const data = {itemName: req.body.itemName, categoryName: req.body.categoryName, units: req.body.units, reorderQuantity: req.body.reorderQuantity, uid: req.body.uid};
     console.log(data.itemName);
     console.log(req.body.itemName);
+    console.log(data.uid);
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
       // Handle connection errors
@@ -101,17 +105,19 @@ module.exports = function(app) {
         return res.status(500).json({success: false, data: err});
       }
 
-      const query1 = client.query('SELECT category_id FROM categories WHERE category_name=($1);', [data.categoryName]);
+      const query1 = client.query('SELECT category_id FROM categories WHERE category_name=($1) and u_id=($2);', [data.categoryName, data.uid]);
       // Stream results back one row at a time
       query1.on('row', (row) => {
-        var queryString = 'INSERT INTO products(category_id, name, units, reorder_point) values($1, $2, $3, $4) RETURNING *;';
-        var query = client.query(queryString, [row.category_id, data.itemName, data.units, data.reorderQuantity], function (error, result) {
+        console.log(row);
+        var queryString = 'INSERT INTO products(category_id, name, units, reorder_point, u_id) values($1, $2, $3, $4, $5) RETURNING *;';
+        var query = client.query(queryString, [row.category_id, data.itemName, data.units, data.reorderQuantity, data.uid], function (error, result) {
+             console.log(error);
             done();
         });
 
-        query.on("row", function (row, result) {
-          client.query('INSERT INTO daily_inventory(day_date, product_id, quantity) values(NOW(), $1, $2)', [row.product_id, data.quantity]);
-        });
+        // query.on("row", function (row, result) {
+        //   client.query('INSERT INTO daily_inventory(day_date, product_id, quantity, u_id) values(NOW(), $1, $2, $3)', [row.product_id, data.quantity, data.uid]);
+        // });
       });     
     });
   });
@@ -119,7 +125,7 @@ module.exports = function(app) {
   app.post('/api/daily_inventory', (req, res, next) => {
     var sum = [];
     // Grab data from http request
-    const data = {startDate: req.body.startDate, endDate: req.body.endDate, item: req.body.item, category: req.body.category};
+    const data = {startDate: req.body.startDate, endDate: req.body.endDate, item: req.body.item, category: req.body.category, uid: req.body.uid};
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
       // Handle connection errors
@@ -132,17 +138,17 @@ module.exports = function(app) {
       //get product id of item
       //get all inventories for that product, between the date range, with negative quantities
       //add all results
-      const category = client.query('SELECT category_id FROM categories WHERE category_name=($1);', [data.category]);
+      const category = client.query('SELECT category_id FROM categories WHERE category_name=($1) and u_id=($2);', [data.category, data.uid]);
       category.on('row', (row) => {
         done();
         var categoryID = row.category_id;
         
-        const product = client.query('SELECT product_id FROM products WHERE name=($1) and category_id=($2);', [data.item, categoryID]);
+        const product = client.query('SELECT product_id FROM products WHERE name=($1) and category_id=($2) and u_id=($3);', [data.item, categoryID, data.uid]);
         product.on('row', (row) => {
           done();
           var productID = row.product_id;
 
-          const inventories = client.query("SELECT SUM(quantity) from daily_inventory where product_id=($1) and quantity < 0 and day_date >= ($2)::date and day_date <= ($3)::date;", [productID, data.startDate, data.endDate]);
+          const inventories = client.query("SELECT SUM(quantity) from daily_inventory where product_id=($1) and quantity < 0 and day_date >= ($2)::date and day_date <= ($3)::date and u_id=($4);", [productID, data.startDate, data.endDate, data.uid]);
           // Stream results back one row at a time
           inventories.on('row', (row) => { 
             done();

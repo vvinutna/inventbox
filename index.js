@@ -100,10 +100,11 @@ app.get('/dashboard', isLoggedIn, function(request, response, next) {
 
     
     // SQL Query > Select Data
-    const query = client.query('SELECT reorder_point, name, category_name, units, SUM(quantity) as quantity FROM (SELECT d.day_date, c.category_name, p.name, p.units, p.reorder_point, d.quantity FROM categories c INNER JOIN ' +
-      'products p on c.category_id=p.category_id INNER JOIN daily_inventory d on p.product_id=d.product_id) as dash GROUP BY name, category_name, units, reorder_point ORDER BY category_name;');
+    const query = client.query('SELECT reorder_point, name, category_name, units, SUM(quantity) as quantity FROM (SELECT d.day_date, c.category_name, p.name, p.units, p.reorder_point, d.quantity FROM (categories c INNER JOIN ' +
+      'products p on c.category_id=p.category_id INNER JOIN daily_inventory d on p.product_id=d.product_id) WHERE c.u_id=($1) AND p.u_id=($1) AND d.u_id=($1)) as dash GROUP BY name, category_name, units, reorder_point ORDER BY category_name;', [request.user.u_id]);
     // Stream results back one row at a time
     query.on('row', (row) => {
+      console.log(row);
       results.push(row);
     });
 
@@ -132,7 +133,7 @@ app.get('/updateStock', isLoggedIn, function(request, response) {
       return res.status(500).json({success: false, data: err});
     }
     // SQL Query > Select Data
-    const query = client.query('SELECT * FROM products;');
+    const query = client.query('SELECT * FROM products where u_id=($1);', [request.user.u_id]);
     // Stream results back one row at a time
     query.on('row', (row) => {
       items.push(row);
@@ -143,7 +144,8 @@ app.get('/updateStock', isLoggedIn, function(request, response) {
       //return res.json(results);
       response.render('pages/updateItems', { 
         items: items,
-        email: request.user.email
+        email: request.user.email, 
+        id: request.user.u_id
       });
     });
   });
@@ -161,8 +163,10 @@ app.get('/usage', isLoggedIn, function(request, response) {
       console.log(err);
       return res.status(500).json({success: false, data: err});
     }
+
+    console.log(request.body.u_id);
     // SQL Query > Select Data
-    const query1 = client.query('SELECT * FROM products;');
+    const query1 = client.query('SELECT * FROM products where u_id=($1);', [request.user.u_id]);
     // Stream results back one row at a time
     query1.on('row', (row) => {
       results.push(row);
@@ -172,7 +176,7 @@ app.get('/usage', isLoggedIn, function(request, response) {
       done();
     });
 
-    const query2 = client.query('SELECT * FROM categories;');
+    const query2 = client.query('SELECT * FROM categories where u_id=($1);', [request.user.u_id]);
     // Stream results back one row at a time
     query2.on('row', (row) => {
       categories.push(row);
@@ -184,7 +188,8 @@ app.get('/usage', isLoggedIn, function(request, response) {
       response.render('pages/usage', { 
         results: results,
         categories: categories,
-        email: request.user.email
+        email: request.user.email, 
+        id: request.user.u_id
       });
     });
   });
@@ -199,7 +204,7 @@ app.get('/updateCategoriesStock', isLoggedIn, function(request, response) {
       console.log(err);
       return res.status(500).json({success: false, data: err});
     }
-    const query = client.query('SELECT * FROM categories;');
+    const query = client.query('SELECT * FROM categories where u_id=($1);', [request.user.u_id]);
     // Stream results back one row at a time
     query.on('row', (row) => {
       results.push(row);
@@ -210,7 +215,8 @@ app.get('/updateCategoriesStock', isLoggedIn, function(request, response) {
       //return res.json(results);
       response.render('pages/updateCategoriesStock', { 
         results: results,
-        email: request.user.email
+        email: request.user.email,
+        id: request.user.u_id
       });
     });
   });
@@ -250,6 +256,8 @@ app.get('/updateCategoriesStock', isLoggedIn, function(request, response) {
 
 app.get('/updateItemsStock', isLoggedIn, function(request, response) {
   const results = [];
+  const items = [];
+  var uid = request.user.u_id;
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
     // Handle connection errors
@@ -259,18 +267,27 @@ app.get('/updateItemsStock', isLoggedIn, function(request, response) {
       return res.status(500).json({success: false, data: err});
     }
     // SQL Query > Select Data
-    const query = client.query('SELECT * FROM categories;');
+    const query = client.query('SELECT * FROM categories where u_id=$1;', [uid]);
     // Stream results back one row at a time
     query.on('row', (row) => {
       results.push(row);
     });
+
+    const query1 = client.query('SELECT * FROM products where u_id=$1;', [uid]);
+    // Stream results back one row at a time
+    query1.on('row', (row) => {
+      console.log(row);
+      items.push(row);
+    });
     // After all data is returned, close connection and return results
-    query.on('end', () => {
+    query1.on('end', () => {
       done();
       //return res.json(results);
       response.render('pages/updateItemsStock', { 
         results: results,
-        email: request.user.email
+        items: items,
+        email: request.user.email, 
+        id: request.user.u_id
       });
     });
   });

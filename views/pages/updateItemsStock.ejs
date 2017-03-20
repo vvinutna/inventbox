@@ -79,7 +79,7 @@
               <div class="form-group">
                   <label for="input1">Select Item</label>
                     <select class="form-control" required="required">
-                      <% results.forEach(function(result) { %>
+                      <% items.forEach(function(result) { %>
                         <option><%= result.name %></option>
                       <% }); %>
                     </select>
@@ -110,15 +110,15 @@
   $("#newItemForm").submit(function(event) {
     var form = document.getElementById("newItemForm");
     var itemName = form.elements[0].value;
-    console.log(itemName);
     var units = form.elements[1].value;
     var reorderQuantity = form.elements[2].value;
     var categoryName = form.elements[3].value;
-    console.log(categoryName);
+    var id = JSON.parse('<%= id %>');
+
     $.ajax({
       type: 'POST',
       url: '/api/products',
-      data: { itemName: itemName, categoryName: categoryName, units: units},
+      data: { itemName: itemName, categoryName: categoryName, units: units, reorderQuantity: reorderQuantity, uid: id},
     });
     alert("The new item has been added!");
   });

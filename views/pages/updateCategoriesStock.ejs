@@ -94,11 +94,12 @@
   $("#addCategoryForm").submit(function(event) {
     var form = document.getElementById("addCategoryForm");
     var categoryName = form.elements[0].value;
+    var id = JSON.parse('<%= id %>');
 
     $.ajax({
       type: 'POST',
       url: '/api/categories',
-      data: { "category": categoryName }
+      data: { category: categoryName, uid: id }
     });
     alert("The category has been added!");
   });
@@ -106,11 +107,12 @@
   $("#removeCategoryForm").submit(function(event) {
     var form = document.getElementById("removeCategoryForm");
     var categoryName = form.elements[0].value;
+    var id = JSON.parse('<%= id %>');
     
     $.ajax({
       type: 'DELETE',
       url: '/api/categories/' + categoryName,
-      data: { "category_name": categoryName },
+      data: { category_name: categoryName, uid: id },
       success: function (data) {
         alert("The inventory has been updated!");
       },
