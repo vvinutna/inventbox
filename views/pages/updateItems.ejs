@@ -52,7 +52,8 @@
                 <!-- /.box-body -->
 
               <div class="box-footer">
-                <button id="update" class="btn btn-primary" width="25px">Update</button>
+                <button id="add" class="btn btn-primary" width="25px">Add</button>
+                <button id="remove" class="btn btn-primary" width="25px">Remove</button>
               </div>
             </form>
           </div>
@@ -68,7 +69,7 @@ required
 
 <script>
 
-  /*var addButton = document.getElementById("add");
+  var addButton = document.getElementById("add");
   addButton.onclick = function() {
     var form = document.getElementById("updateItemForm");
     var itemName = form.elements[0].value;
@@ -78,9 +79,14 @@ required
     $.ajax({
       type: 'PUT',
       url: '/api/daily_inventory/' + itemName,
-      data: { itemName: itemName, quantity: quantity, uid: id }
+      data: { itemName: itemName, quantity: quantity, uid: id },
+      success: function (data) {
+          alert("The inventory has been updated!");
+        },
+        error: function (data) {
+          alert("Something went wrong, please try again!");
+        }
     });
-    alert("The inventory has been updated!");
   }
 
   var removeButton = document.getElementById("remove");
@@ -88,7 +94,7 @@ required
 
     var form = document.getElementById("updateItemForm");
     var itemName = form.elements[0].value;
-    var quantity = form.elements[1].value;
+    var quantity = form.elements[1].value * -1;
     var id = JSON.parse('<%= id %>');
     $.ajax({
         type: 'PUT',
@@ -102,22 +108,22 @@ required
         }
       });
 
-    }*/
+    }
 
 
-  $("#updateItemForm").submit(function(event) {
-    var form = document.getElementById("updateItemForm");
-    var itemName = form.elements[0].value;
-    var quantity = form.elements[1].value;
-    var id = JSON.parse('<%= id %>');
+  // $("#updateItemForm").submit(function(event) {
+  //   var form = document.getElementById("updateItemForm");
+  //   var itemName = form.elements[0].value;
+  //   var quantity = form.elements[1].value;
+  //   var id = JSON.parse('<%= id %>');
     
-    $.ajax({
-      type: 'PUT',
-      url: '/api/daily_inventory/' + itemName,
-      data: { itemName: itemName, quantity: quantity, uid: id }
-    });
-    alert("The inventory has been updated!");
-  });
+  //   $.ajax({
+  //     type: 'PUT',
+  //     url: '/api/daily_inventory/' + itemName,
+  //     data: { itemName: itemName, quantity: quantity, uid: id }
+  //   });
+  //   alert("The inventory has been updated!");
+  // });
 
 
 
