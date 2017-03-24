@@ -38,8 +38,8 @@
           <form id="addCategoryForm" role="form">
                 <div class="box-body">
                 <div class="form-group">
-                    <label for="input1">Category Name</label>
-                    <input type="text" class="form-control" id="category" placeholder="Enter category name" name="category" required="required">
+                    <label for="categoryName">Category Name</label>
+                    <input type="text" class="form-control" id="categoryName" placeholder="Enter category name" name="categoryName" required="required">
                     </div>
                 </div>
                 <!-- /.box-body -->
@@ -63,7 +63,7 @@
                 
                 <div class="form-group">
                   <label>Select Category</label>
-                  <select class="form-control" required="required">
+                  <select class="form-control" required="required" id="selectCategory" name="selectCategory">
                     <% results.forEach(function(result) { %>
                       <option><%= result.category_name %></option>
                     <% }); %>
@@ -91,7 +91,30 @@
 
 <script>
 
-  $("#addCategoryForm").submit(function(event) {
+  $("#addCategoryForm").validate({
+    rules: {
+      categoryName: {
+        required: true
+      }
+    },
+    submitHandler: function(form) {
+      submitAddCategoryForm();
+    }
+  });
+
+  $("#removeCategoryForm").validate({
+    rules: {
+      selectCategory: {
+        required: true
+      }
+    },
+    submitHandler: function(form) {
+      submitRemoveCategoryForm();
+    }
+  });
+
+  
+  function submitAddCategoryForm() {
     var form = document.getElementById("addCategoryForm");
     var categoryName = form.elements[0].value;
     var id = JSON.parse('<%= id %>');
@@ -104,7 +127,7 @@
     alert("The category has been added!");
   });
 
-  $("#removeCategoryForm").submit(function(event) {
+  function submitRemoveCategoryForm() {
     var form = document.getElementById("removeCategoryForm");
     var categoryName = form.elements[0].value;
     var id = JSON.parse('<%= id %>');

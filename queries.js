@@ -17,9 +17,17 @@ module.exports = function(app) {
         return res.status(500).json({success: false, data: err});
       }
       // SQL Query > Insert Data
-      client.query('INSERT INTO categories(category_name, u_id) values($1, $2)',
+      const query = client.query('INSERT INTO categories(category_name, u_id) values($1, $2)',
       [data.category, data.uid]);
+
+      // After all data is returned, close connection
+      query.on('end', () => {
+        done();
+      });
+
+
     });
+
     return res.json();
   });
 
@@ -37,8 +45,14 @@ module.exports = function(app) {
         return res.status(500).json({success: false, data: err});
       }
       // SQL Query > Insert Data
-      client.query('DELETE FROM categories WHERE category_name=($1) and u_id=($2);',
+      const query = client.query('DELETE FROM categories WHERE category_name=($1) and u_id=($2);',
       [category_name, uid]);
+
+      // After all data is returned, close connection
+      query.on('end', () => {
+        done();
+      });
+
     });
     return res.json();
   });
@@ -61,11 +75,19 @@ module.exports = function(app) {
       }
       console.log(name);
       const query1 = client.query('SELECT * FROM products WHERE name=($1) and u_id=($2);', [name, uid]);
+
+
       // Stream results back one row at a time
       query1.on('row', (row) => {
         client.query('INSERT INTO daily_inventory(day_date, product_id, quantity, u_id) values(NOW(), $2, $1, $3);',
         [quantity, row.product_id, uid]);
       });
+
+      // After all data is returned, close connection
+      query1.on('end', () => {
+        done();
+      });
+
 
     });
     return res.json();
@@ -84,8 +106,14 @@ module.exports = function(app) {
         return res.status(500).json({success: false, data: err});
       }
       // SQL Query > Insert Data
-      client.query('DELETE * FROM products WHERE name=($1)',
+      const query = client.query('DELETE * FROM products WHERE name=($1)',
       [item_name]);
+
+      // After all data is returned, close connection
+      query.on('end', () => {
+        done();
+      });
+
     });
     return res.json();
   });
@@ -106,6 +134,7 @@ module.exports = function(app) {
       }
 
       const query1 = client.query('SELECT category_id FROM categories WHERE category_name=($1) and u_id=($2);', [data.categoryName, data.uid]);
+
       // Stream results back one row at a time
       query1.on('row', (row) => {
         console.log(row);
@@ -115,10 +144,16 @@ module.exports = function(app) {
             done();
         });
 
+
         // query.on("row", function (row, result) {
         //   client.query('INSERT INTO daily_inventory(day_date, product_id, quantity, u_id) values(NOW(), $1, $2, $3)', [row.product_id, data.quantity, data.uid]);
         // });
-      });     
+      });
+      // After all data is returned, close connection
+      query1.on('end', () => {
+        done();
+      });
+  
     });
   });
 
@@ -142,11 +177,22 @@ module.exports = function(app) {
       category.on('row', (row) => {
         done();
         var categoryID = row.category_id;
-        
+
+        // After all data is returned, close connection
+        category.on('end', () => {
+          done();
+        });
+
         const product = client.query('SELECT product_id FROM products WHERE name=($1) and category_id=($2) and u_id=($3);', [data.item, categoryID, data.uid]);
         product.on('row', (row) => {
           done();
           var productID = row.product_id;
+
+        // After all data is returned, close connection
+        product.on('end', () => {
+          done();
+        });
+
 
           const inventories = client.query("SELECT SUM(quantity) from daily_inventory where product_id=($1) and quantity < 0 and day_date >= ($2)::date and day_date <= ($3)::date and u_id=($4);", [productID, data.startDate, data.endDate, data.uid]);
           // Stream results back one row at a time
@@ -156,8 +202,14 @@ module.exports = function(app) {
             console.log(sum);
             return res.json(sum);
           }); 
+
+          // After all data is returned, close connection
+          inventories.on('end', () => {
+            done();
+          });
+
         }); 
-      });    
+      });   
     });
   });
 }
