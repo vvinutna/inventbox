@@ -123,7 +123,7 @@
         required: true
       }
     },
-    submitHandler: function(form) {
+    submitHandler: function (form) {
       submitNewItemForm();
     }
   });
@@ -134,7 +134,7 @@
         required: true
       }
     },
-    submitHandler: function(form) {
+    submitHandler: function (form) {
       submitRemoveItemForm();
     }
   });
@@ -153,7 +153,7 @@
       data: { itemName: itemName, categoryName: categoryName, units: units, reorderQuantity: reorderQuantity, uid: id},
     });
     alert("The new item has been added!");
-  });
+  }
 
   function submitRemoveItemForm() {
     var form = document.getElementById("removeItemForm");
@@ -165,7 +165,7 @@
       data: { itemName : itemName }
     });
     alert("The item has been deleted!");
-  });
+  }
 </script>
 
 </body>
