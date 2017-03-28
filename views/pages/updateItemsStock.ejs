@@ -124,6 +124,7 @@
       }
     },
     submitHandler: function (form) {
+      console.log("in submit handker");
       submitNewItemForm();
     }
   });
@@ -146,13 +147,21 @@
     var reorderQuantity = form.elements[2].value;
     var categoryName = form.elements[3].value;
     var id = JSON.parse('<%= id %>');
+    console.log("1");
 
     $.ajax({
       type: 'POST',
+      dataType: "html",
       url: '/api/products',
       data: { itemName: itemName, categoryName: categoryName, units: units, reorderQuantity: reorderQuantity, uid: id},
+      success: function (data) {
+        console.log("2");
+        alert("The new item has been added!");
+      }, 
+      error: function (data) {
+        alert("Something went wrong, please try again later!");
+      }
     });
-    alert("The new item has been added!");
   }
 
   function submitRemoveItemForm() {
@@ -161,10 +170,16 @@
     
     $.ajax({
       type: 'DELETE',
+      dataType: "html",
       url: '/api/products/' + itemName,
-      data: { itemName : itemName }
+      data: { itemName : itemName },
+      success: function (data) {
+        alert("The item has been deleted!");
+      }, 
+      error: function (data) {
+        alert("Something went wrong, please try again later!");
+      }
     });
-    alert("The item has been deleted!");
   }
 </script>
 
