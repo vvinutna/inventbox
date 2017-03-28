@@ -91,7 +91,7 @@
 
 <script>
 
-  $("#addCategoryForm").submit(function(event) {
+  $("#addCategoryForm").submit(function (event) {
     var form = document.getElementById("addCategoryForm");
     var categoryName = form.elements[0].value;
     var id = JSON.parse('<%= id %>');
@@ -104,7 +104,7 @@
     alert("The category has been added!");
   });
 
-  $("#removeCategoryForm").submit(function(event) {
+  $("#removeCategoryForm").submit(function (event) {
     var form = document.getElementById("removeCategoryForm");
     var categoryName = form.elements[0].value;
     var id = JSON.parse('<%= id %>');
