@@ -91,6 +91,9 @@
 
 <script>
 
+
+var addButton = document.getElementById("add");
+addButton.onclick = function() {
   $("#addCategoryForm").validate({
     rules: {
       categoryName: {
@@ -102,18 +105,6 @@
     }
   });
 
-  $("#removeCategoryForm").validate({
-    rules: {
-      selectCategory: {
-        required: true
-      }
-    },
-    submitHandler: function(form) {
-      submitRemoveCategoryForm();
-    }
-  });
-
-  
   function submitAddCategoryForm() {
     var form = document.getElementById("addCategoryForm");
     var categoryName = form.elements[0].value;
@@ -126,6 +117,20 @@
     });
     alert("The category has been added!");
   }
+}
+
+var removeButton = document.getElementById("remove");
+removeButton.onclick = function() {
+  $("#removeCategoryForm").validate({
+    rules: {
+      selectCategory: {
+        required: true
+      }
+    },
+    submitHandler: function(form) {
+      submitRemoveCategoryForm();
+    }
+  });
 
   function submitRemoveCategoryForm(){
     var form = document.getElementById("removeCategoryForm");
@@ -143,6 +148,7 @@
         alert("The category has been deleted!");
       }
     });
+}
 <<<<<<< HEAD
 
 =======
