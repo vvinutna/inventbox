@@ -172,10 +172,6 @@ app.get('/usage', isLoggedIn, function(request, response) {
       results.push(row);
     });
 
-    query1.on('end', () => {
-      done();
-    });
-
     const query2 = client.query('SELECT * FROM categories where u_id=($1);', [request.user.u_id]);
     // Stream results back one row at a time
     query2.on('row', (row) => {

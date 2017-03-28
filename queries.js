@@ -20,12 +20,9 @@ module.exports = function(app) {
       const query = client.query('INSERT INTO categories(category_name, u_id) values($1, $2)',
       [data.category, data.uid]);
 
-      // After all data is returned, close connection
       query.on('end', () => {
         done();
       });
-
-
     });
 
     return res.json();
@@ -48,7 +45,6 @@ module.exports = function(app) {
       const query = client.query('DELETE FROM categories WHERE category_name=($1) and u_id=($2);',
       [category_name, uid]);
 
-      // After all data is returned, close connection
       query.on('end', () => {
         done();
       });
@@ -73,9 +69,7 @@ module.exports = function(app) {
         console.log(err);
         return res.status(500).json({success: false, data: err});
       }
-      console.log(name);
       const query1 = client.query('SELECT * FROM products WHERE name=($1) and u_id=($2);', [name, uid]);
-
 
       // Stream results back one row at a time
       query1.on('row', (row) => {
@@ -83,11 +77,9 @@ module.exports = function(app) {
         [quantity, row.product_id, uid]);
       });
 
-      // After all data is returned, close connection
       query1.on('end', () => {
         done();
       });
-
 
     });
     return res.json();
@@ -106,14 +98,11 @@ module.exports = function(app) {
         return res.status(500).json({success: false, data: err});
       }
       // SQL Query > Insert Data
-      const query = client.query('DELETE * FROM products WHERE name=($1)',
-      [item_name]);
+      const query = client.query('DELETE FROM products WHERE name=($1)', [item_name]);
 
-      // After all data is returned, close connection
       query.on('end', () => {
         done();
       });
-
     });
     return res.json();
   });
@@ -121,9 +110,7 @@ module.exports = function(app) {
   app.post('/api/products', (req, res, next) => {
     // Grab data from http request
     const data = {itemName: req.body.itemName, categoryName: req.body.categoryName, units: req.body.units, reorderQuantity: req.body.reorderQuantity, uid: req.body.uid};
-    console.log(data.itemName);
-    console.log(req.body.itemName);
-    console.log(data.uid);
+    console.log("1");
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
       // Handle connection errors
@@ -134,27 +121,22 @@ module.exports = function(app) {
       }
 
       const query1 = client.query('SELECT category_id FROM categories WHERE category_name=($1) and u_id=($2);', [data.categoryName, data.uid]);
-
+      console.log("2");
       // Stream results back one row at a time
       query1.on('row', (row) => {
-        console.log(row);
+        console.log("3");
         var queryString = 'INSERT INTO products(category_id, name, units, reorder_point, u_id) values($1, $2, $3, $4, $5) RETURNING *;';
         var query = client.query(queryString, [row.category_id, data.itemName, data.units, data.reorderQuantity, data.uid], function (error, result) {
-             console.log(error);
-            done();
+            //console.log("4");
+            //done();
         });
-
-
-        // query.on("row", function (row, result) {
-        //   client.query('INSERT INTO daily_inventory(day_date, product_id, quantity, u_id) values(NOW(), $1, $2, $3)', [row.product_id, data.quantity, data.uid]);
-        // });
       });
-      // After all data is returned, close connection
+
       query1.on('end', () => {
         done();
       });
-  
     });
+    return res.json();
   });
 
   app.post('/api/daily_inventory', (req, res, next) => {
@@ -175,41 +157,28 @@ module.exports = function(app) {
       //add all results
       const category = client.query('SELECT category_id FROM categories WHERE category_name=($1) and u_id=($2);', [data.category, data.uid]);
       category.on('row', (row) => {
-        done();
+        //done();
         var categoryID = row.category_id;
-
-        // After all data is returned, close connection
-        category.on('end', () => {
-          done();
-        });
 
         const product = client.query('SELECT product_id FROM products WHERE name=($1) and category_id=($2) and u_id=($3);', [data.item, categoryID, data.uid]);
         product.on('row', (row) => {
-          done();
+          //done();
           var productID = row.product_id;
-
-        // After all data is returned, close connection
-        product.on('end', () => {
-          done();
-        });
-
 
           const inventories = client.query("SELECT SUM(quantity) from daily_inventory where product_id=($1) and quantity < 0 and day_date >= ($2)::date and day_date <= ($3)::date and u_id=($4);", [productID, data.startDate, data.endDate, data.uid]);
           // Stream results back one row at a time
           inventories.on('row', (row) => { 
-            done();
+            //done();
             sum.push(row);
             console.log(sum);
             return res.json(sum);
           }); 
-
-          // After all data is returned, close connection
-          inventories.on('end', () => {
-            done();
-          });
-
         }); 
-      });   
+      });  
+
+      category.on('end', () => {
+        done();
+      }); 
     });
   });
 }
