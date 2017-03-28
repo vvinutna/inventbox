@@ -38,20 +38,21 @@
           <form role="form" id="newItemForm">
               <div class="box-body">
               <div class="form-group">
-                  <label for="input1">Item Name</label>
-                  <input type="text" class="form-control" id="input1" placeholder="Enter name" required="required">
+                  <label for="itemName">Item Name</label>
+                  <input type="text" class="form-control" id="itemName" placeholder="Enter name" required="required" name="itemName">
               </div>
               <div class="form-group">
-                <label for="input2">Units</label>
-                <input type="text" class="form-control" id="input2" placeholder="Enter units" required="required">
+                <label for="units">Units</label>
+                <input type="text" class="form-control" id="units" placeholder="Enter units" required="required" name="units">
               </div>
               <div class="form-group">
-                <label for="input3">Reorder Quantity</label>
-                <input type="number" class="form-control" id="input3" placeholder="Enter reorder quantity" required="required">
+                <label for="reorderQuantity">Reorder Quantity</label>
+                <input type="number" class="form-control" id="reorderQuantity" placeholder="Enter reorder quantity" required="required" name="reorderQuantity">
               </div>
               <div class="form-group">
                   <label>Select Category</label>
-                  <select class="form-control" required="required">
+                  <select class="form-control" id="selectCategory" name="selectCategory" required="required">
+                    <option disabled selected value></value>
                     <% results.forEach(function(result) { %>
                       <option><%= result.category_name %></option>
                     <% }); %>
@@ -77,8 +78,8 @@
             <form id="removeItemForm" role="form">
                               <div class="box-body">
               <div class="form-group">
-                  <label for="input1">Select Item</label>
-                    <select class="form-control" required="required">
+                  <label for="selectItem">Select Item</label>
+                    <select class="form-control" required="required" id="selectItem" name="selectItem">
                       <% items.forEach(function(result) { %>
                         <option><%= result.name %></option>
                       <% }); %>
@@ -107,7 +108,38 @@
 
 <script>
 
-  $("#newItemForm").submit(function (event) {
+  $("#newItemForm").validate({
+    rules: {
+      itemName: {
+        required: true
+      },
+      units: {
+        required: true
+      },
+      reorderQuantity: {
+        required: true
+      },
+      selectCategory: {
+        required: true
+      }
+    },
+    submitHandler: function(form) {
+      submitNewItemForm();
+    }
+  });
+
+  $("#removeItemForm").validate({
+    rules: {
+      selectItem: {
+        required: true
+      }
+    },
+    submitHandler: function(form) {
+      submitRemoveItemForm();
+    }
+  });
+
+  function submitNewItemForm() {
     var form = document.getElementById("newItemForm");
     var itemName = form.elements[0].value;
     var units = form.elements[1].value;
@@ -123,7 +155,7 @@
     alert("The new item has been added!");
   });
 
-  $("#removeItemForm").submit(function (event) {
+  function submitRemoveItemForm() {
     var form = document.getElementById("removeItemForm");
     var itemName = form.elements[0].value;
     
