@@ -125,9 +125,9 @@
       data: { category: categoryName, uid: id }
     });
     alert("The category has been added!");
-  });
+  }
 
-  function submitRemoveCategoryForm() {
+  function submitRemoveCategoryForm(){
     var form = document.getElementById("removeCategoryForm");
     var categoryName = form.elements[0].value;
     var id = JSON.parse('<%= id %>');
@@ -144,7 +144,7 @@
       }
     });
 
-  });
+  }
 
 </script>
 
