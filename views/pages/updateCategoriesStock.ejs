@@ -122,9 +122,14 @@
     $.ajax({
       type: 'POST',
       url: '/api/categories',
-      data: { category: categoryName, uid: id }
+      data: { category: categoryName, uid: id }, 
+      success: function (data) {
+        alert("The category has been added!");
+      },
+      error: function (data) {
+        alert("Something went wrong, please try again later!");
+      }
     });
-    alert("The category has been added!");
   }
 
   function submitRemoveCategoryForm() {
@@ -137,10 +142,10 @@
       url: '/api/categories/' + categoryName,
       data: { category_name: categoryName, uid: id },
       success: function (data) {
-        alert("The inventory has been updated!");
+        alert("The category has been deleted!");
       },
       error: function (data) {
-        alert("The category has been deleted!");
+        alert("Something went wrong, please try again later!");
       }
     });
   }

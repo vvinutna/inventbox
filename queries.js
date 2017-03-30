@@ -7,7 +7,6 @@ module.exports = function(app) {
 
     // Grab data from http request
     const data = {category: req.body.category, uid: req.body.uid};
-    console.log(data.uid);
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
       // Handle connection errors
@@ -19,6 +18,10 @@ module.exports = function(app) {
       // SQL Query > Insert Data
       const query = client.query('INSERT INTO categories(category_name, u_id) values($1, $2)',
       [data.category, data.uid]);
+
+      query.on('error', function(err) {
+        done();
+      });
 
       query.on('end', () => {
         done();
@@ -44,6 +47,10 @@ module.exports = function(app) {
       // SQL Query > Insert Data
       const query = client.query('DELETE FROM categories WHERE category_name=($1) and u_id=($2);',
       [category_name, uid]);
+
+      query.on('error', function(err) {
+        done();
+      });
 
       query.on('end', () => {
         done();
@@ -77,6 +84,10 @@ module.exports = function(app) {
         [quantity, row.product_id, uid]);
       });
 
+      query1.on('error', function(err) {
+        done();
+      });
+
       query1.on('end', () => {
         done();
       });
@@ -99,6 +110,10 @@ module.exports = function(app) {
       }
       // SQL Query > Insert Data
       const query = client.query('DELETE FROM products WHERE name=($1)', [item_name]);
+
+      query.on('error', function(err) {
+        done();
+      });
 
       query.on('end', () => {
         done();
@@ -130,6 +145,10 @@ module.exports = function(app) {
             //console.log("4");
             //done();
         });
+      });
+
+      query1.on('error', function(err) {
+        done();
       });
 
       query1.on('end', () => {
@@ -175,6 +194,10 @@ module.exports = function(app) {
           }); 
         }); 
       });  
+
+      category.on('error', function(err) {
+        done();
+      });
 
       category.on('end', () => {
         done();
