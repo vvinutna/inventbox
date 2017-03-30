@@ -20,6 +20,7 @@ module.exports = function(app) {
       [data.category, data.uid]);
 
       query.on('error', function(err) {
+        console.log(error);
         done();
       });
 
@@ -27,7 +28,7 @@ module.exports = function(app) {
         done();
       });
     });
-
+    console.log(res.status);
     return res.json();
   });
 
