@@ -92,9 +92,7 @@
 <script>
 
 
-var addButton = document.getElementById("add");
-addButton.onclick = function() {
-  $("#addCategoryForm").validate({
+ $("#addCategoryForm").validate({
     rules: {
       categoryName: {
         required: true
@@ -104,23 +102,6 @@ addButton.onclick = function() {
       submitAddCategoryForm();
     }
   });
-
-  function submitAddCategoryForm() {
-    var form = document.getElementById("addCategoryForm");
-    var categoryName = form.elements[0].value;
-    var id = JSON.parse('<%= id %>');
-
-    $.ajax({
-      type: 'POST',
-      url: '/api/categories',
-      data: { category: categoryName, uid: id }
-    });
-    alert("The category has been added!");
-  }
-}
-
-var removeButton = document.getElementById("remove");
-removeButton.onclick = function() {
   $("#removeCategoryForm").validate({
     rules: {
       selectCategory: {
@@ -131,8 +112,19 @@ removeButton.onclick = function() {
       submitRemoveCategoryForm();
     }
   });
-
-  function submitRemoveCategoryForm(){
+  
+  function submitAddCategoryForm() {
+    var form = document.getElementById("addCategoryForm");
+    var categoryName = form.elements[0].value;
+    var id = JSON.parse('<%= id %>');
+    $.ajax({
+      type: 'POST',
+      url: '/api/categories',
+      data: { category: categoryName, uid: id }
+    });
+    alert("The category has been added!");
+  });
+  function submitRemoveCategoryForm() {
     var form = document.getElementById("removeCategoryForm");
     var categoryName = form.elements[0].value;
     var id = JSON.parse('<%= id %>');
@@ -148,9 +140,8 @@ removeButton.onclick = function() {
         alert("The category has been deleted!");
       }
     });
-  }
+  });
 
-}
 
 </script>
 
