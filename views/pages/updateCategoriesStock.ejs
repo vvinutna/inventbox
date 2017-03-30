@@ -119,6 +119,7 @@
     var id = JSON.parse('<%= id %>');
     $.ajax({
       type: 'POST',
+      dataType: "html",
       url: '/api/categories',
       data: { category: categoryName, uid: id }, 
       success: function (data) {
@@ -137,6 +138,7 @@
     
     $.ajax({
       type: 'DELETE',
+      dataType: "html",
       url: '/api/categories/' + categoryName,
       data: { category_name: categoryName, uid: id },
       success: function (response) {
