@@ -69,7 +69,11 @@ required
 
 <script>
 
-  $('#updateItemForm').validate({
+
+
+var addButton = document.getElementById("add");
+addButton.onclick = function() {
+    $('#updateItemForm').validate({
     rules: {
       selectItem: {
         required: true
@@ -79,14 +83,6 @@ required
       }
     },
     submitHandler: function(form) {
-      submitUpdateItemForm();
-    }
-  });
-
-  function submitUpdateItemForm() {
-    
-    var addButton = document.getElementById("add");
-    addButton.onclick = function() {
       var form = document.getElementById("updateItemForm");
       var itemName = form.elements[0].value;
       console.log(itemName);
@@ -95,24 +91,99 @@ required
       console.log(quantity);
       $.ajax({
         type: 'PUT',
+        dataType: "html",
         url: '/api/daily_inventory/' + itemName,
-        data: { itemName: itemName, quantity: quantity, uid: id}
+        data: { itemName: itemName, quantity: quantity, uid: id},
+        success: function (data) {
+          alert("The item has been added to your inventory!");
+        },
+        error: function (data) {
+          alert("Something went wrong, please try again later!")
+        }
       });
     }
+  });
+}
 
-    var removeButton = document.getElementById("remove");
-    removeButton.onclick = function() {
+var removeButton = document.getElementById("remove");
+removeButton.onclick = function() {
+    $('#updateItemForm').validate({
+    rules: {
+      selectItem: {
+        required: true
+      },
+      quantity: {
+        required: true
+      }
+    },
+    submitHandler: function(form) {
       var form = document.getElementById("updateItemForm");
       var itemName = form.elements[0].value;
       var quantity = -1 * form.elements[1].value;
       var id = JSON.parse('<%= id %>');
       $.ajax({
           type: 'PUT',
+          dataType: "html",
           url: '/api/daily_inventory/' + itemName,
           data: { itemName: itemName, quantity: quantity, uid: id},
-        });
+          success: function (data) {
+            alert("The item has been removed from your inventory!");
+          },
+          error: function (data) {
+            alert("Something went wrong, please try again later!")
+          }
+      });
     }
-  }
+  });
+}
+
+
+// // // // // // // // // // // // // // // //
+
+  // $('#updateItemForm').validate({
+  //   rules: {
+  //     selectItem: {
+  //       required: true
+  //     },
+  //     quantity: {
+  //       required: true
+  //     }
+  //   },
+  //   submitHandler: function(form) {
+  //     submitUpdateItemForm();
+  //   }
+  // });
+
+  // function submitUpdateItemForm() {
+    
+  //   var addButton = document.getElementById("add");
+  //   addButton.onclick = function() {
+  //     var form = document.getElementById("updateItemForm");
+  //     var itemName = form.elements[0].value;
+  //     console.log(itemName);
+  //     var quantity = form.elements[1].value;
+  //     var id = JSON.parse('<%= id %>');
+  //     console.log(quantity);
+  //     $.ajax({
+  //       type: 'PUT',
+  //       url: '/api/daily_inventory/' + itemName,
+  //       data: { itemName: itemName, quantity: quantity, uid: id}
+  //     });
+  //   }
+
+  //   var removeButton = document.getElementById("remove");
+  //   removeButton.onclick = function() {
+  //     var form = document.getElementById("updateItemForm");
+  //     var itemName = form.elements[0].value;
+  //     var quantity = -1 * form.elements[1].value;
+  //     var id = JSON.parse('<%= id %>');
+  //     $.ajax({
+  //         type: 'PUT',
+  //         url: '/api/daily_inventory/' + itemName,
+  //         data: { itemName: itemName, quantity: quantity, uid: id},
+  //       });
+  //   }
+  // }
 
 
 

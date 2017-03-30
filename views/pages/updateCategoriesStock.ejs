@@ -91,7 +91,8 @@
 
 <script>
 
-  $("#addCategoryForm").validate({
+
+ $("#addCategoryForm").validate({
     rules: {
       categoryName: {
         required: true
@@ -101,7 +102,6 @@
       submitAddCategoryForm();
     }
   });
-
   $("#removeCategoryForm").validate({
     rules: {
       selectCategory: {
@@ -112,13 +112,11 @@
       submitRemoveCategoryForm();
     }
   });
-
   
   function submitAddCategoryForm() {
     var form = document.getElementById("addCategoryForm");
     var categoryName = form.elements[0].value;
     var id = JSON.parse('<%= id %>');
-
     $.ajax({
       type: 'POST',
       url: '/api/categories',
@@ -148,7 +146,8 @@
         alert("Something went wrong, please try again later!");
       }
     });
-  }
+  });
+
 
 </script>
 
