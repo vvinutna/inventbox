@@ -139,10 +139,12 @@
       type: 'DELETE',
       url: '/api/categories/' + categoryName,
       data: { category_name: categoryName, uid: id },
-      success: function (data) {
+      success: function (response) {
+        console.log(response);
         alert("The category has been deleted!");
       },
-      error: function (data) {
+      error: function (response) {
+        console.log(response);
         alert("Something went wrong, please try again later!");
       }
     });
