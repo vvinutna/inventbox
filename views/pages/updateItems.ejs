@@ -95,7 +95,8 @@ addButton.onclick = function() {
         url: '/api/daily_inventory/' + itemName,
         data: { itemName: itemName, quantity: quantity, uid: id},
         success: function (data) {
-          alert("The item has been added to your inventory!");
+          alert("The inventory has been updated!");
+          window.location.reload();
         },
         error: function (data) {
           alert("Something went wrong, please try again later!")
@@ -127,7 +128,8 @@ removeButton.onclick = function() {
           url: '/api/daily_inventory/' + itemName,
           data: { itemName: itemName, quantity: quantity, uid: id},
           success: function (data) {
-            alert("The item has been removed from your inventory!");
+            alert("The inventory has been updated!");
+            window.location.reload();
           },
           error: function (data) {
             alert("Something went wrong, please try again later!")

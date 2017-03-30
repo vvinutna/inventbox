@@ -119,13 +119,14 @@
     var id = JSON.parse('<%= id %>');
     $.ajax({
       type: 'POST',
-      dataType: "html",
       url: '/api/categories',
       data: { category: categoryName, uid: id }, 
-      success: function (data) {
+      success: function (response) {
         alert("The category has been added!");
+        window.location.reload();
       },
-      error: function (data) {
+      error: function (request, status, error) {
+        console.log(error);
         alert("Something went wrong, please try again later!");
       }
     });
@@ -138,12 +139,11 @@
     
     $.ajax({
       type: 'DELETE',
-      dataType: "html",
       url: '/api/categories/' + categoryName,
       data: { category_name: categoryName, uid: id },
       success: function (response) {
-        console.log(response);
         alert("The category has been deleted!");
+        window.location.reload();
       },
       error: function (response) {
         console.log(response);

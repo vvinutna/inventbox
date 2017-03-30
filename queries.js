@@ -4,7 +4,7 @@ var pg = require('pg');
 module.exports = function(app) {
 
   app.post('/api/categories', (req, res, next) => {
-
+    const results = [];
     // Grab data from http request
     const data = {category: req.body.category, uid: req.body.uid};
     // Get a Postgres client from the connection pool
@@ -12,7 +12,6 @@ module.exports = function(app) {
       // Handle connection errors
       if(err) {
         done();
-        console.log(err);
         return res.status(500).json({success: false, data: err});
       }
       // SQL Query > Insert Data
@@ -20,20 +19,20 @@ module.exports = function(app) {
       [data.category, data.uid]);
 
       query.on('error', function(jqXHR, textStatus, errorThrown) {
-        console.log(textStatus);
-        console.log(errorThrown);
         done();
+        return res.status(500).json({success: false, data: err});
       });
 
       query.on('end', () => {
         done();
+        return res.json(results);
       });
     });
-    return res.json();
+    
   });
 
   app.delete('/api/categories/:category_name', (req, res, next) => {
-
+    const results = [];
     // Grab data from http request
     const category_name = req.body.category_name;
     const uid = req.body.uid;
@@ -51,23 +50,22 @@ module.exports = function(app) {
 
       query.on('error', function(err) {
         done();
+        return res.status(500).json({success: false, data: err});
       });
 
       query.on('end', () => {
         done();
+        return res.json(results);
       });
 
     });
-    return res.json();
   });
 
   app.put('/api/daily_inventory/:product_id', (req, res, next) => {
-
+    const results = [];
     // Grab data from http request
     const name = req.body.itemName;
-    console.log(name);
     const quantity = req.body.quantity;
-    console.log(quantity);
     const uid = req.body.uid;
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
@@ -87,18 +85,18 @@ module.exports = function(app) {
 
       query1.on('error', function(err) {
         done();
+        return res.status(500).json({success: false, data: err});
       });
 
       query1.on('end', () => {
         done();
+        return res.json(results);
       });
-
     });
-    return res.json();
   });
 
   app.delete('/api/products/:name', (req, res, next) => {
-
+    const results = [];
     // Grab data from http request
     const item_name = req.body.itemName;
     // Get a Postgres client from the connection pool
@@ -114,19 +112,21 @@ module.exports = function(app) {
 
       query.on('error', function(err) {
         done();
+        return res.status(500).json({success: false, data: err});
       });
 
       query.on('end', () => {
         done();
+        return res.json(results);
       });
     });
-    return res.json();
   });
 
   app.post('/api/products', (req, res, next) => {
+    const results = [];
     // Grab data from http request
     const data = {itemName: req.body.itemName, categoryName: req.body.categoryName, units: req.body.units, reorderQuantity: req.body.reorderQuantity, uid: req.body.uid};
-    console.log("1");
+
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
       // Handle connection errors
@@ -137,26 +137,33 @@ module.exports = function(app) {
       }
 
       const query1 = client.query('SELECT category_id FROM categories WHERE category_name=($1) and u_id=($2);', [data.categoryName, data.uid]);
-      console.log("2");
+
       // Stream results back one row at a time
       query1.on('row', (row) => {
-        console.log("3");
+        console.log("1");
+        console.log(row.category_id);
+        console.log(data.itemName);
         var queryString = 'INSERT INTO products(category_id, name, units, reorder_point, u_id) values($1, $2, $3, $4, $5) RETURNING *;';
-        var query = client.query(queryString, [row.category_id, data.itemName, data.units, data.reorderQuantity, data.uid], function (error, result) {
-            //console.log("4");
-            //done();
+        var query = client.query(queryString, [row.category_id, data.itemName, data.units, data.reorderQuantity, data.uid]);
+        query.on('error', function(err) {
+          done();
+          console.log("2");
+          return res.status(500).json({success: false, data: err});
+        });
+
+        query.on('end', () => {
+          done();
+          console.log("4");
+          return res.json(results);
         });
       });
 
       query1.on('error', function(err) {
         done();
-      });
-
-      query1.on('end', () => {
-        done();
+        console.log("3");
+        return res.status(500).json({success: false, data: err});
       });
     });
-    return res.json();
   });
 
   app.post('/api/daily_inventory', (req, res, next) => {
@@ -168,7 +175,6 @@ module.exports = function(app) {
       // Handle connection errors
       if(err) {
         done();
-        console.log(err);
         return res.status(500).json({success: false, data: err});
       }
 
@@ -180,7 +186,19 @@ module.exports = function(app) {
         //done();
         var categoryID = row.category_id;
 
-        const product = client.query('SELECT product_id FROM products WHERE name=($1) and category_id=($2) and u_id=($3);', [data.item, categoryID, data.uid]);
+        const product = client.query('SELECT product_id FROM products WHERE name=($1) and category_id=($2) and u_id=($3);', [data.item, categoryID, data.uid], function(err, results) {
+          console.log(results.rowCount);
+          if (results.rowCount == 0) {
+            done();
+            return res.status(500).json({success: false, data: err});
+          }
+        });
+
+        product.on('error', function(err) {
+          done();
+          return res.status(500).json({success: false, data: err});
+        });
+
         product.on('row', (row) => {
           //done();
           var productID = row.product_id;
@@ -188,9 +206,8 @@ module.exports = function(app) {
           const inventories = client.query("SELECT SUM(quantity) from daily_inventory where product_id=($1) and quantity < 0 and day_date >= ($2)::date and day_date <= ($3)::date and u_id=($4);", [productID, data.startDate, data.endDate, data.uid]);
           // Stream results back one row at a time
           inventories.on('row', (row) => { 
-            //done();
+            done();
             sum.push(row);
-            console.log(sum);
             return res.json(sum);
           }); 
         }); 
@@ -198,11 +215,13 @@ module.exports = function(app) {
 
       category.on('error', function(err) {
         done();
+        return res.status(500).json({success: false, data: err});
       });
 
-      category.on('end', () => {
+      /*category.on('end', () => {
         done();
-      }); 
+        console.log("6");
+      }); */
     });
   });
 }

@@ -157,6 +157,7 @@
       success: function (data) {
         console.log("2");
         alert("The new item has been added!");
+        window.location.reload();
       }, 
       error: function (data) {
         alert("Something went wrong, please try again later!");
@@ -175,6 +176,7 @@
       data: { itemName : itemName },
       success: function (data) {
         alert("The item has been deleted!");
+        window.location.reload();
       }, 
       error: function (data) {
         alert("Something went wrong, please try again later!");
