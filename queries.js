@@ -19,8 +19,9 @@ module.exports = function(app) {
       const query = client.query('INSERT INTO categories(category_name, u_id) values($1, $2)',
       [data.category, data.uid]);
 
-      query.on('error', function(err) {
-        console.log(error);
+      query.on('error', function(jqXHR, textStatus, errorThrown) {
+        console.log(textStatus);
+        console.log(errorThrown);
         done();
       });
 
@@ -28,7 +29,6 @@ module.exports = function(app) {
         done();
       });
     });
-    console.log(res.status);
     return res.json();
   });
 
