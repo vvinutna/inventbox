@@ -33,11 +33,15 @@
           </div>
           <div class="box-footer no-padding">
             <ul class="nav nav-stacked">
+            <% var i = 0; %>
             <% results.forEach(function(result) { %>
               <% if (result.quantity < result.reorder_point) { %>
                 <li><a><%= result.name %></a></li>
-              <% } %>
+              <% i++; } %>
             <% });%>
+            <% if(i == 0) { %>
+              <li><a>No items to reorder.</a></li>
+            <%}%>
             </ul>
           </div>
         </div>
@@ -55,6 +59,7 @@
                     <th>Current Quantity</th>
                     <th style="width: 200px;">Reorder Progress</th>
                   </tr>
+                  <% var i = 0; %>
                   <% results.forEach(function(result) { %>
                     <tr>
                       <td><%= result.name %></td>
@@ -74,7 +79,12 @@
                       </td>
 
                     </tr>                
-                  <% }); %>
+                  <% i++; }); %>
+                  <%if(i == 0) { %>
+                      <tr> 
+                        <td colspan="5"> No items in your inventory. </td> 
+                      </tr>
+                  <% } %>
                 </table>
             </div>
           </div>
