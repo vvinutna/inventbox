@@ -43,14 +43,14 @@ function User() {
 
         console.log(this.email +' will be saved');
 
-        client.query('INSERT INTO users(email, password) VALUES($1, $2)', [this.email, this.password], function (err, result) {
+        var query = client.query('INSERT INTO users(email, password) VALUES($1, $2)', [this.email, this.password], function (err, result) {
             if(err){
                 console.log(err);
                 return console.error('error running query', err);
             }
             //console.log(this.email);
         });
-        client.query('SELECT * FROM users ORDER BY u_id desc limit 1', null, function(err, result){
+        var query1 = client.query('SELECT * FROM users ORDER BY u_id desc limit 1', null, function(err, result){
 
             if(err){
                 return callback(null);
@@ -67,6 +67,8 @@ function User() {
                 return callback(user);
             }
         });
+
+        query1.on('end', () => { client.end(); });
     };
 }
 
@@ -87,7 +89,7 @@ User.findOne = function(email, password, callback){
     //        return console.error('could not connect to postgres', err);
     //    }
 
-    client.query("SELECT * from users where email=$1", [email], function(err, result){
+    var query = client.query("SELECT * from users where email=$1", [email], function(err, result){
         if(err){
             console.log('error');
             return callback(err, isNotAvailable, this);
@@ -108,6 +110,7 @@ User.findOne = function(email, password, callback){
         client.end();
         return callback(false, isNotAvailable, result.rows[0]);
     });
+
 //});
 };
 
@@ -116,7 +119,7 @@ User.findById = function(id, callback){
     var client = new pg.Client(conString);
 
     client.connect();
-    client.query("SELECT * from users where u_id=$1", [id], function(err, result){
+    var query = client.query("SELECT * from users where u_id=$1", [id], function(err, result){
         if(err){
             return callback(err, null);
         }
@@ -129,6 +132,8 @@ User.findById = function(id, callback){
             return callback(null, user);
         }
     });
+
+    query.on('end', () => { client.end(); });
 };
 
 //User.connect = function(callback){

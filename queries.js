@@ -116,6 +116,7 @@ module.exports = function(app) {
       });
 
       query.on('end', () => {
+        client.end();
         done();
         return res.json(results);
       });
@@ -159,6 +160,7 @@ module.exports = function(app) {
       });
 
       query1.on('error', function(err) {
+        client.end();
         done();
         console.log("3");
         return res.status(500).json({success: false, data: err});
@@ -169,7 +171,7 @@ module.exports = function(app) {
   app.post('/api/daily_inventory', (req, res, next) => {
     var sum = [];
     // Grab data from http request
-    const data = {startDate: req.body.startDate, endDate: req.body.endDate, item: req.body.item, category: req.body.category, uid: req.body.uid};
+    const data = {startDate: req.body.startDate, endDate: req.body.endDate, item: req.body.item, uid: req.body.uid};
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
       // Handle connection errors
@@ -181,22 +183,14 @@ module.exports = function(app) {
       //get product id of item
       //get all inventories for that product, between the date range, with negative quantities
       //add all results
-      const category = client.query('SELECT category_id FROM categories WHERE category_name=($1) and u_id=($2);', [data.category, data.uid]);
-      category.on('row', (row) => {
-        //done();
-        var categoryID = row.category_id;
 
-        const product = client.query('SELECT product_id FROM products WHERE name=($1) and category_id=($2) and u_id=($3);', [data.item, categoryID, data.uid], function(err, results) {
+
+        const product = client.query('SELECT product_id FROM products WHERE name=($1) and u_id=($2);', [data.item, data.uid], function(err, results) {
           console.log(results.rowCount);
           if (results.rowCount == 0) {
             done();
             return res.status(500).json({success: false, data: err});
           }
-        });
-
-        product.on('error', function(err) {
-          done();
-          return res.status(500).json({success: false, data: err});
         });
 
         product.on('row', (row) => {
@@ -211,9 +205,10 @@ module.exports = function(app) {
             return res.json(sum);
           }); 
         }); 
-      });  
 
-      category.on('error', function(err) {
+
+      product.on('error', function(err) {
+        client.end();
         done();
         return res.status(500).json({success: false, data: err});
       });
